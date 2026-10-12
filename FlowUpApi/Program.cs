@@ -5,16 +5,36 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString =
     builder.Configuration.GetConnectionString("OracleDb");
 
-var walletPath = Environment.GetEnvironmentVariable("ORACLE_WALLET_PATH");
-
+// Oracle Wallet 경로 설정 (로컬 / Render 공용)
+var walletPath = builder.Configuration["ORACLE_WALLET_PATH"];
 if (string.IsNullOrWhiteSpace(walletPath))
 {
-    // 기존 로컬 Windows Wallet 경로를 여기에 유지
     walletPath = @"C:\Users\ringh\Downloads\Wallet_FLOWUPDB";
+}
+
+// ZIP 압축 해제 시 하위 폴더가 생겨도 tnsnames.ora를 찾도록 처리
+if (Directory.Exists(walletPath) &&
+    !File.Exists(Path.Combine(walletPath, "tnsnames.ora")))
+{
+    var tnsFiles = Directory.GetFiles(walletPath, "tnsnames.ora", SearchOption.AllDirectories);
+    if (tnsFiles.Length == 1)
+    {
+        walletPath = Path.GetDirectoryName(tnsFiles[0])!;
+    }
+}
+
+if (!File.Exists(Path.Combine(walletPath, "tnsnames.ora")))
+{
+    Console.Error.WriteLine($"Oracle Wallet: tnsnames.ora 파일을 찾지 못했습니다. 경로: {walletPath}");
+}
+else
+{
+    Console.WriteLine($"Oracle Wallet: tnsnames.ora 확인 완료. 경로: {walletPath}");
 }
 
 OracleConfiguration.TnsAdmin = walletPath;
 OracleConfiguration.WalletLocation = walletPath;
+
 // ======================================================
 // CORS
 // ======================================================
@@ -986,9 +1006,8 @@ app.MapPost("/api/people", async (PeopleData data) =>
 // Start Server
 // ======================================================
 
-var port = Environment.GetEnvironmentVariable("PORT") ?? "5013";
+app.Run("http://0.0.0.0:5013");
 
-app.Run($"http://0.0.0.0:{port}");
 // ======================================================
 // Request Model
 // ======================================================
