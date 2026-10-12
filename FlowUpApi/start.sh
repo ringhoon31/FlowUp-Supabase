@@ -6,13 +6,12 @@ echo "=== Oracle Wallet Setup ==="
 mkdir -p /tmp/flowup-wallet
 
 # Render Secret File 확인
-if [ ! -f /etc/secrets/wallet.b64 ]; then
-    echo "ERROR: wallet.b64 not found"
+if [ ! -f /etc/secrets/wallet-base64.txt ]; then
+    echo "ERROR: wallet-base64.txt not found"
     exit 1
 fi
 
-# Wallet 압축 복원
-base64 -d /etc/secrets/wallet.b64 > /tmp/flowup-wallet.zip
+base64 -d /etc/secrets/wallet-base64.txt > /tmp/flowup-wallet.zip
 unzip -o -q /tmp/flowup-wallet.zip -d /tmp/flowup-wallet
 
 # tnsnames.ora 검색
