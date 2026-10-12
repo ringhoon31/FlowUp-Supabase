@@ -5,6 +5,13 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString =
     builder.Configuration.GetConnectionString("OracleDb");
 
+// Oracle Wallet 경로 설정 (로컬 / 배포 환경 공용)
+var walletPath = builder.Configuration["ORACLE_WALLET_PATH"]
+    ?? @"C:\Users\ringh\Downloads\Wallet_FLOWUPDB";
+
+OracleConfiguration.TnsAdmin = walletPath;
+OracleConfiguration.WalletLocation = walletPath;
+
 // ======================================================
 // CORS
 // ======================================================
@@ -269,7 +276,7 @@ app.MapGet("/api/people", async () =>
     catch (Exception ex)
     {
         Console.WriteLine("Oracle DB ERROR:");
-        Console.WriteLine(ex.Message);
+       Console.WriteLine(ex.ToString());
 
         return Results.Problem(
             "Failed to read current data from Oracle DB."
