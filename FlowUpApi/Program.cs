@@ -5,13 +5,16 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString =
     builder.Configuration.GetConnectionString("OracleDb");
 
-// Oracle Wallet 경로 설정 (로컬 / 배포 환경 공용)
-var walletPath = builder.Configuration["ORACLE_WALLET_PATH"]
-    ?? @"C:\Users\ringh\Downloads\Wallet_FLOWUPDB";
+var walletPath = Environment.GetEnvironmentVariable("ORACLE_WALLET_PATH");
+
+if (string.IsNullOrWhiteSpace(walletPath))
+{
+    // 기존 로컬 Windows Wallet 경로를 여기에 유지
+    walletPath = @"C:\Users\ringh\Downloads\Wallet_FLOWUPDB";
+}
 
 OracleConfiguration.TnsAdmin = walletPath;
 OracleConfiguration.WalletLocation = walletPath;
-
 // ======================================================
 // CORS
 // ======================================================
