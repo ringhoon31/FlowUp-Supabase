@@ -983,8 +983,9 @@ app.MapPost("/api/people", async (PeopleData data) =>
 // Start Server
 // ======================================================
 
-app.Run("http://0.0.0.0:5013");
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5013";
 
+app.Run($"http://0.0.0.0:{port}");
 // ======================================================
 // Request Model
 // ======================================================
