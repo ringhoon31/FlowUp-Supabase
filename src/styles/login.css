@@ -1,0 +1,257 @@
+/* 로그인 화면에서 기존 앱의 너비·여백 제한 제거 */
+#root:has(.flow-login-page) {
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.main:has(.flow-login-page) {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.flow-login-page,
+.flow-login-page * {
+  box-sizing: border-box;
+}
+
+.flow-login-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  color: #15233c;
+  background:
+    radial-gradient(
+      ellipse 52% 60% at 50% 52%,
+      #223d68 0%,
+      #192c4b 55%,
+      #14233c 100%
+    );
+}
+
+/* 상단 브랜드와 메인 이동 */
+.flow-login-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 92px;
+  padding: 0 clamp(24px, 3.5vw, 68px);
+}
+
+.flow-login-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: #fff;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.flow-login-brand-icon {
+  font-size: 30px;
+  line-height: 1;
+}
+
+.flow-login-back {
+  padding: 10px 4px;
+  border: 0;
+  background: transparent;
+  color: #bdcce2;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.flow-login-back:hover {
+  color: #fff;
+}
+
+.flow-login-back:focus-visible {
+  outline: 2px solid #a8c9ff;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* 중앙 로그인 카드 */
+.flow-login-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 92px);
+  min-height: calc(100dvh - 92px);
+  padding: 20px 24px 80px;
+}
+
+.flow-login-card {
+  width: min(100%, 504px);
+  padding: 46px 44px 34px;
+  border: 1px solid rgba(224, 232, 245, 0.85);
+  border-radius: 20px;
+  background: #fff;
+  box-shadow:
+    0 24px 65px rgba(5, 16, 37, 0.22),
+    0 4px 16px rgba(5, 16, 37, 0.08);
+}
+
+.flow-login-eyebrow {
+  margin-bottom: 18px;
+  color: #71819d;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.19em;
+}
+
+.flow-login-card h1 {
+  margin: 0;
+  color: #14213a;
+  font-size: clamp(29px, 3vw, 36px);
+  font-weight: 800;
+  letter-spacing: -0.055em;
+  line-height: 1.3;
+}
+
+.flow-login-description {
+  margin: 8px 0 34px;
+  color: #74839b;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.flow-login-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 23px;
+}
+
+.flow-login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.flow-login-field label {
+  color: #17233b;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.flow-login-field input {
+  display: block;
+  width: 100%;
+  height: 55px;
+  padding: 0 16px;
+  border: 1px solid #cfd9e8;
+  border-radius: 9px;
+  outline: none;
+  background: #fff;
+  color: #17233b;
+  font: inherit;
+  font-size: 15px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.flow-login-field input::placeholder {
+  color: #9aa8bb;
+}
+
+.flow-login-field input:focus {
+  border-color: #2d70df;
+  box-shadow: 0 0 0 3px rgba(45, 112, 223, 0.13);
+}
+
+.flow-login-error {
+  margin: -9px 0 -6px;
+  color: #d84248;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.flow-login-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  height: 56px;
+  margin-top: 7px;
+  border: 0;
+  border-radius: 9px;
+  background: linear-gradient(100deg, #2d70e5, #1258d2);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.flow-login-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(24, 92, 208, 0.22);
+}
+
+.flow-login-submit:focus-visible {
+  outline: 3px solid #a8c9ff;
+  outline-offset: 3px;
+}
+
+.flow-login-submit span {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.flow-login-test-account {
+  margin-top: 30px;
+  padding-top: 23px;
+  border-top: 1px solid #e8edf5;
+  color: #8391a6;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* 모바일 */
+@media (max-width: 600px) {
+  .flow-login-header {
+    height: 72px;
+    padding: 0 20px;
+  }
+
+  .flow-login-brand {
+    gap: 8px;
+    font-size: 22px;
+  }
+
+  .flow-login-brand-icon {
+    font-size: 25px;
+  }
+
+  .flow-login-back {
+    font-size: 13px;
+  }
+
+  .flow-login-content {
+    min-height: calc(100dvh - 72px);
+    padding: 20px 16px 48px;
+  }
+
+  .flow-login-card {
+    padding: 34px 24px 28px;
+    border-radius: 16px;
+  }
+
+  .flow-login-description {
+    margin-bottom: 28px;
+  }
+}

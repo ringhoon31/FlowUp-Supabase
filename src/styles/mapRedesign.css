@@ -1,0 +1,527 @@
+/* =========================================
+   매장 찾기 전체 화면 레이아웃
+========================================= */
+
+/* 기존 index.css의 #root 너비 제한 해제 */
+#root:has(.flow-map-shell) {
+  width: 100%;
+  max-width: none;
+  min-height: 100dvh;
+  margin: 0;
+  border: 0;
+  text-align: left;
+}
+
+/* 기존 layout.css의 .main 여백 제거 */
+.main:has(.flow-map-shell) {
+  padding: 0;
+}
+
+.flow-map-shell,
+.flow-map-shell * {
+  box-sizing: border-box;
+}
+
+.flow-map-shell {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100dvh;
+  min-height: 520px;
+  overflow: hidden;
+  background: #fff;
+  color: #15223b;
+}
+
+/* =========================================
+   상단바
+========================================= */
+
+.flow-map-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 0 0 68px;
+  height: 68px;
+  padding: 0 28px;
+  background: #1d2b43;
+  color: #fff;
+  position: relative;
+  z-index: 20;
+}
+
+.flow-map-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.flow-map-brand-icon {
+  font-size: 27px;
+  line-height: 1;
+}
+
+.flow-map-brand strong {
+  color: #fff;
+  font-size: 23px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.flow-map-brand-divider {
+  width: 1px;
+  height: 22px;
+  margin: 0 9px;
+  background: #6e7d94;
+}
+
+.flow-map-page-name {
+  font-size: 18px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.flow-map-home-button {
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #e5edf8;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.flow-map-home-button:hover {
+  background: rgba(255, 255, 255, 0.11);
+}
+
+.flow-map-home-button:focus-visible {
+  outline: 2px solid #9ec5ff;
+  outline-offset: 2px;
+}
+
+/* =========================================
+   기존 지도 화면을 감싸는 영역
+========================================= */
+
+.flow-map-body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* 기존 MapView.jsx 안에 있던 중앙 제목은 숨김 */
+.flow-map-shell .map-header {
+  display: none;
+}
+
+/* 기존 map.css의 가운데 최대 너비와 패딩 제거 */
+.flow-map-shell .map-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* 왼쪽 검색 패널 + 오른쪽 큰 지도 */
+.flow-map-shell .map-content {
+  display: grid;
+  grid-template-columns: clamp(360px, 32vw, 520px) minmax(0, 1fr);
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  max-height: none;
+  gap: 0;
+}
+
+/* =========================================
+   왼쪽 패널의 제목
+========================================= */
+
+.flow-map-sidebar-title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  width: clamp(360px, 32vw, 520px);
+  height: 108px;
+  padding: 25px 28px 12px;
+  background: #fff;
+  border-right: 1px solid #e2e8f0;
+  pointer-events: none;
+}
+
+.flow-map-sidebar-title h1 {
+  margin: 0 0 6px;
+  color: #15223b;
+  font-size: 29px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.04em;
+}
+
+.flow-map-sidebar-title p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* 제목 높이만큼 기존 검색 패널 안쪽을 아래로 내림 */
+.flow-map-shell .map-sidebar {
+  position: relative;
+  min-height: 0;
+  padding-top: 108px;
+  border: 0;
+  border-right: 1px solid #e2e8f0;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+/* =========================================
+   기존 검색 입력창
+========================================= */
+
+.flow-map-shell .map-search {
+  display: flex;
+  gap: 8px;
+  padding: 12px 28px 14px;
+  border-bottom: 0;
+}
+
+.flow-map-shell .map-search input {
+  flex: 1;
+  min-width: 0;
+  height: 48px;
+  padding: 0 15px;
+  border: 1px solid #cfd9e8;
+  border-radius: 10px;
+  background: #fff;
+  color: #172842;
+  font-size: 14px;
+}
+
+.flow-map-shell .map-search input:focus {
+  border-color: #347de9;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(52, 125, 233, 0.12);
+}
+
+.flow-map-shell .map-search button {
+  flex: 0 0 50px;
+  width: 50px;
+  height: 48px;
+  border: 0;
+  border-radius: 10px;
+  background: #2d75ed;
+  color: #fff;
+  cursor: pointer;
+}
+
+.flow-map-shell .map-search button:hover {
+  background: #1765db;
+}
+
+.flow-map-shell .map-search button:disabled {
+  background: #b7c1ce;
+  cursor: not-allowed;
+}
+
+/* =========================================
+   기존 Flowup/일반 매장 범례
+========================================= */
+
+.flow-map-shell .map-legend {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 28px 16px;
+  border-bottom: 1px solid #e9edf4;
+  background: #fff;
+}
+
+.flow-map-shell .map-legend div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid #dce5f2;
+  border-radius: 22px;
+  background: #f8faff;
+  color: #48607c;
+  font-size: 12px;
+}
+
+/* =========================================
+   기존 검색 결과 목록
+========================================= */
+
+.flow-map-shell .store-list-header {
+  padding: 16px 28px;
+  border-bottom: 1px solid #e9edf4;
+  background: #fafcff;
+}
+
+.flow-map-shell .store-list-header strong {
+  color: #15223b;
+  font-size: 15px;
+}
+
+.flow-map-shell .store-list-header span {
+  color: #587195;
+  font-size: 13px;
+}
+
+.flow-map-shell .store-list {
+  flex: 1;
+  min-height: 0;
+  padding: 12px 16px 20px;
+  overflow-y: auto;
+  background: #fafcff;
+}
+
+.flow-map-shell .store-list-item,
+.flow-map-shell .store-list-item.flowup-store {
+  display: flex;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 16px;
+  border: 1px solid #e0e7f1;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(16, 38, 72, 0.04);
+  text-align: left;
+  cursor: pointer;
+}
+
+.flow-map-shell .store-list-item:hover,
+.flow-map-shell .store-list-item.flowup-store:hover {
+  border-color: #bbd3fc;
+  background: #f3f8ff;
+}
+
+.flow-map-shell .store-list-item.selected-store {
+  border-color: #2d75ed;
+  background: #f5f9ff;
+  box-shadow: 0 0 0 1px #2d75ed;
+}
+
+.flow-map-shell .store-list-icon {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 10px;
+}
+
+.flow-map-shell .store-list-info strong {
+  font-size: 15px;
+}
+
+.flow-map-shell .store-list-info p {
+  font-size: 12px;
+}
+
+.flow-map-shell .empty-store {
+  color: #8392a8;
+  text-align: center;
+}
+
+/* =========================================
+   기존 네이버 지도
+========================================= */
+
+.flow-map-shell .map-container {
+  position: relative;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.flow-map-shell .naver-map {
+  width: 100%;
+  height: 100%;
+}
+
+/*
+  .my-location-button
+  .flowup-detail-card
+  .map-guide
+
+  위 세 요소는 기존 map.css의 동작과 위치를 유지한다.
+*/
+
+/* =========================================
+   태블릿
+========================================= */
+
+@media (max-width: 850px) {
+  .flow-map-shell .map-content {
+    grid-template-columns: 320px minmax(0, 1fr);
+  }
+
+  .flow-map-sidebar-title {
+    width: 320px;
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .flow-map-shell .map-search {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .flow-map-shell .map-legend {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .flow-map-shell .store-list-header {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .flow-map-shell .store-list {
+    padding: 10px;
+  }
+}
+
+/* =========================================
+   모바일: 목록 위, 지도 아래
+========================================= */
+
+@media (max-width: 700px) {
+  .flow-map-shell {
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  .flow-map-topbar {
+    height: 64px;
+    flex-basis: 64px;
+    padding: 0 14px;
+  }
+
+  .flow-map-brand {
+    gap: 7px;
+  }
+
+  .flow-map-brand-icon {
+    font-size: 22px;
+  }
+
+  .flow-map-brand strong {
+    font-size: 19px;
+  }
+
+  .flow-map-brand-divider {
+    margin: 0 4px;
+  }
+
+  .flow-map-page-name {
+    font-size: 15px;
+  }
+
+  .flow-map-home-button {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .flow-map-body {
+    overflow: visible;
+  }
+
+  .flow-map-shell .map-page {
+    height: auto;
+    overflow: visible;
+  }
+
+  .flow-map-shell .map-content {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+  }
+
+  .flow-map-sidebar-title {
+    width: 100%;
+    height: 98px;
+    padding: 22px 18px 10px;
+    border-right: 0;
+  }
+
+  .flow-map-sidebar-title h1 {
+    font-size: 25px;
+  }
+
+  .flow-map-shell .map-sidebar {
+    height: auto;
+    padding-top: 98px;
+    border-right: 0;
+    overflow: visible;
+  }
+
+  .flow-map-shell .store-list {
+    max-height: 270px;
+    overflow-y: auto;
+  }
+
+  .flow-map-shell .map-container {
+    height: 52dvh;
+    min-height: 380px;
+    border-top: 1px solid #dfe7f2;
+  }
+}
+/* 지도 오른쪽 Flowup 매장 상세 카드 확대 */
+.flow-map-shell .flowup-detail-card {
+  top: 32px;
+  right: 32px;
+  width: min(420px, calc(100% - 48px));
+  padding: 26px;
+  border-radius: 18px;
+  box-shadow: 0 16px 42px rgba(19, 35, 60, 0.18);
+}
+
+.flow-map-shell .flowup-detail-header h2 {
+  font-size: 28px;
+}
+
+.flow-map-shell .flowup-detail-badge {
+  padding: 6px 10px;
+  font-size: 14px;
+}
+
+.flow-map-shell .flowup-detail-address p {
+  font-size: 16px;
+}
+
+.flow-map-shell .flowup-detail-divider {
+  margin: 30px 0;
+}
+
+/* 화면이 좁을 때 카드가 지도를 과하게 가리지 않도록 */
+@media (max-width: 700px) {
+  .flow-map-shell .flowup-detail-card {
+    top: 12px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    max-height: calc(52dvh - 24px);
+    padding: 19px;
+    overflow-y: auto;
+  }
+}

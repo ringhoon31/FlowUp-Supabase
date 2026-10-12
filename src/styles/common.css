@@ -1,0 +1,1225 @@
+/* =========================
+   기본
+========================= */
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --flow-bg: #f4f7fb;
+  --flow-text: #17233c;
+  --flow-card: #ffffff;
+  --flow-border: #dfe6f0;
+  --flow-subtext: #6b7890;
+  --flow-primary: #2385f4;
+  --flow-page-bg: #f4f7fb;
+}
+
+.flowup-theme-light {
+  --flow-bg: #f4f7fb;
+  --flow-text: #17233c;
+  --flow-card: #ffffff;
+  --flow-border: #dfe6f0;
+  --flow-subtext: #6b7890;
+  --flow-primary: #2385f4;
+  --flow-page-bg: #f4f7fb;
+}
+
+.flowup-theme-dark {
+  --flow-bg: #0f1b2d;
+  --flow-text: #f4f7fb;
+  --flow-card: #172b49;
+  --flow-border: #29415f;
+  --flow-subtext: #9fb2cc;
+  --flow-primary: #2385f4;
+  --flow-page-bg: #0f1b2d;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--flow-bg);
+  color: var(--flow-text);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.app {
+  min-height: 100vh;
+  background: var(--flow-bg);
+  color: var(--flow-text);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* =========================================================
+   Flowup 라이트 테마
+   기존 다크 디자인은 그대로 유지하고,
+   설정에서 라이트 모드를 선택했을 때만 아래 스타일을 적용합니다.
+========================================================= */
+
+/* 공통 관리자 페이지 배경 */
+.app.flowup-theme-light .flow-dashboard,
+.app.flowup-theme-light .flow-settings-page,
+.app.flowup-theme-light .flow-stats-page,
+.app.flowup-theme-light .flow-analysis-page,
+.app.flowup-theme-light .flow-store-page {
+  color: #17233c !important;
+  background: #f4f7fb !important;
+  background-image: none !important;
+}
+
+.app.flowup-theme-light .flow-dashboard::before,
+.app.flowup-theme-light .flow-dashboard::after,
+.app.flowup-theme-light .flow-settings-page::before,
+.app.flowup-theme-light .flow-settings-page::after,
+.app.flowup-theme-light .flow-stats-page::before,
+.app.flowup-theme-light .flow-stats-page::after,
+.app.flowup-theme-light .flow-analysis-page::before,
+.app.flowup-theme-light .flow-analysis-page::after,
+.app.flowup-theme-light .flow-store-page::before,
+.app.flowup-theme-light .flow-store-page::after {
+  border-color: #d9e4f2 !important;
+}
+
+/* 공통 헤더 */
+.app.flowup-theme-light .topbar {
+  background: #ffffff !important;
+  color: #17233c !important;
+  border-bottom: 1px solid #dfe6f0 !important;
+  box-shadow: 0 2px 10px rgba(30, 55, 90, 0.08) !important;
+}
+
+.app.flowup-theme-light .topbar .logo h2,
+.app.flowup-theme-light .logo h2 {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .topbar .logo p,
+.app.flowup-theme-light .logo p {
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .top-menu-item {
+  color: #52627a !important;
+}
+
+.app.flowup-theme-light .top-menu-item:hover {
+  background: #eef4fb !important;
+}
+
+.app.flowup-theme-light .top-menu-item.active {
+  background: #2385f4 !important;
+  color: #ffffff !important;
+}
+
+/* 관리자 카드 / 패널 */
+.app.flowup-theme-light .flow-dashboard-card,
+.app.flowup-theme-light .flow-dashboard-store-section,
+.app.flowup-theme-light .flow-dashboard-store-picker,
+.app.flowup-theme-light .flow-dashboard-delete-modal,
+.app.flowup-theme-light .flow-settings-panel,
+.app.flowup-theme-light .flow-stats-panel,
+.app.flowup-theme-light .flow-stats-summary-card,
+.app.flowup-theme-light .flow-stats-analysis-panel,
+.app.flowup-theme-light .flow-analysis-panel,
+.app.flowup-theme-light .flow-analysis-summary-card,
+.app.flowup-theme-light .flow-store-panel,
+.app.flowup-theme-light .flow-store-list-panel,
+.app.flowup-theme-light .flow-store-list-item,
+.app.flowup-theme-light .visitor-db-panel {
+  background: #ffffff !important;
+  color: #17233c !important;
+  border-color: #d9e2ee !important;
+  box-shadow: 0 8px 24px rgba(30, 55, 90, 0.07) !important;
+}
+
+/* 관리자 페이지 제목 */
+.app.flowup-theme-light .flow-dashboard-heading h1,
+.app.flowup-theme-light .flow-settings-header h1,
+.app.flowup-theme-light .flow-stats-header h1,
+.app.flowup-theme-light .flow-analysis-header h1,
+.app.flowup-theme-light .flow-store-header h1 {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-heading p,
+.app.flowup-theme-light .flow-dashboard-clock,
+.app.flowup-theme-light .flow-settings-header p,
+.app.flowup-theme-light .flow-stats-header p,
+.app.flowup-theme-light .flow-analysis-header p,
+.app.flowup-theme-light .flow-store-header p {
+  color: #6b7890 !important;
+}
+
+/* Dashboard 텍스트 */
+.app.flowup-theme-light .flow-dashboard-card-title,
+.app.flowup-theme-light .flow-dashboard-stat-label,
+.app.flowup-theme-light .flow-dashboard-store-label,
+.app.flowup-theme-light .flow-dashboard-section-heading,
+.app.flowup-theme-light .flow-dashboard-card-heading,
+.app.flowup-theme-light .flow-dashboard-current-store-info strong,
+.app.flowup-theme-light .flow-dashboard-operation-item strong,
+.app.flowup-theme-light .flow-dashboard-time-box strong,
+.app.flowup-theme-light .flow-dashboard-main-stat strong {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-current-store-info p,
+.app.flowup-theme-light .flow-dashboard-data-note,
+.app.flowup-theme-light .flow-dashboard-graph-note,
+.app.flowup-theme-light .flow-dashboard-clock span {
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-add-store-button {
+  background: #f5f8fc !important;
+  color: #34445d !important;
+  border-color: #d4dfec !important;
+}
+
+/* 설정 */
+.app.flowup-theme-light .flow-settings-panel-heading,
+.app.flowup-theme-light .flow-settings-sensor-row + .flow-settings-sensor-row,
+.app.flowup-theme-light .flow-settings-option + .flow-settings-option {
+  border-color: #e1e7ef !important;
+}
+
+.app.flowup-theme-light .flow-settings-panel-heading h2,
+.app.flowup-theme-light .flow-settings-sensor-row strong,
+.app.flowup-theme-light .flow-settings-option-title {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-settings-panel-heading p,
+.app.flowup-theme-light .flow-settings-sensor-row p,
+.app.flowup-theme-light .flow-settings-option p,
+.app.flowup-theme-light .flow-settings-row-status {
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .flow-settings-row-icon,
+.app.flowup-theme-light .flow-settings-panel-icon {
+  background: #edf5ff !important;
+  color: #2385f4 !important;
+}
+
+.app.flowup-theme-light .flow-settings-theme-option {
+  background: #f8fafc !important;
+  color: #17233c !important;
+  border-color: #d9e2ee !important;
+}
+
+.app.flowup-theme-light .flow-settings-theme-option.active {
+  background: #edf5ff !important;
+  border-color: #2385f4 !important;
+}
+
+.app.flowup-theme-light .flow-settings-theme-option strong,
+.app.flowup-theme-light .flow-settings-theme-option p {
+  color: inherit !important;
+}
+
+/* 통계 / 분석 */
+.app.flowup-theme-light .flow-stats-panel-heading,
+.app.flowup-theme-light .flow-analysis-panel-heading {
+  border-color: #e1e7ef !important;
+}
+
+.app.flowup-theme-light .flow-stats-panel-heading h2,
+.app.flowup-theme-light .flow-analysis-panel-heading h2,
+.app.flowup-theme-light .flow-stats-summary-card strong,
+.app.flowup-theme-light .flow-analysis-summary-card strong {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-stats-panel-heading p,
+.app.flowup-theme-light .flow-analysis-panel-heading p,
+.app.flowup-theme-light .flow-stats-chart-footer,
+.app.flowup-theme-light .flow-analysis-y-axis {
+  color: #6b7890 !important;
+}
+
+/* 매장 등록 */
+.app.flowup-theme-light .flow-store-panel-heading {
+  border-color: #e1e7ef !important;
+}
+
+.app.flowup-theme-light .flow-store-panel-heading h2,
+.app.flowup-theme-light .flow-store-field label,
+.app.flowup-theme-light .flow-store-current-content strong {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-store-field-help,
+.app.flowup-theme-light .flow-store-hint,
+.app.flowup-theme-light .flow-store-current-coordinates,
+.app.flowup-theme-light .flow-store-empty {
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .flow-store-field input,
+.app.flowup-theme-light .flow-store-field textarea,
+.app.flowup-theme-light .flow-store-field select {
+  background: #ffffff !important;
+  color: #17233c !important;
+  border-color: #cfd9e8 !important;
+}
+
+/* 방문자 DB */
+.app.flowup-theme-light .visitor-db-header,
+.app.flowup-theme-light .visitor-log-header {
+  background: #f7f9fc !important;
+  color: #17233c !important;
+  border-color: #e1e7ef !important;
+}
+
+.app.flowup-theme-light .visitor-db-header h3,
+.app.flowup-theme-light .visitor-store-info strong,
+.app.flowup-theme-light .visitor-db-card strong,
+.app.flowup-theme-light .visitor-log-title {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .visitor-db-card,
+.app.flowup-theme-light .visitor-log-row {
+  background: #ffffff !important;
+  color: #17233c !important;
+  border-color: #e1e7ef !important;
+}
+
+.app.flowup-theme-light .visitor-last-updated,
+.app.flowup-theme-light .visitor-extra-info {
+  color: #6b7890 !important;
+}
+
+/* 로그인 */
+.app.flowup-theme-light .flow-login-page {
+  background: #f4f7fb !important;
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-login-card {
+  background: #ffffff !important;
+  color: #17233c !important;
+  border-color: #d9e2ee !important;
+  box-shadow: 0 18px 50px rgba(30, 55, 90, 0.12) !important;
+}
+
+.app.flowup-theme-light .flow-login-header h1,
+.app.flowup-theme-light .flow-login-brand,
+.app.flowup-theme-light .flow-login-field label {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-login-description,
+.app.flowup-theme-light .flow-login-eyebrow {
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .flow-login-field input {
+  background: #ffffff !important;
+  color: #17233c !important;
+  border-color: #cfd9e8 !important;
+}
+
+/* 기존 단순 페이지 */
+.app.flowup-theme-light .simple-page {
+  background: #f4f7fb !important;
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .simple-page-box {
+  background: #ffffff !important;
+  color: #17233c !important;
+  border: 1px solid #dfe6f0 !important;
+}
+
+/* 홈 화면 */
+.app.flowup-theme-light .flow-home-right {
+  background: #eef5fd !important;
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-home-right-inner,
+.app.flowup-theme-light .flow-home-analytics,
+.app.flowup-theme-light .flow-home-chart-card {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-home-analytics {
+  background: #ffffff !important;
+  border-color: #d9e2ee !important;
+  box-shadow: 0 18px 45px rgba(30, 55, 90, 0.09) !important;
+}
+
+.app.flowup-theme-light .flow-home-analytics-heading strong,
+.app.flowup-theme-light .flow-home-chart-heading strong,
+.app.flowup-theme-light .flow-home-metric strong {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-home-live,
+.app.flowup-theme-light .flow-home-chart-heading > span,
+.app.flowup-theme-light .flow-home-metric-label,
+.app.flowup-theme-light .flow-home-manager-description {
+  color: #64748b !important;
+}
+
+.app.flowup-theme-light .flow-home-chart-card {
+  background: #f7f9fc !important;
+  border-color: #d9e2ee !important;
+}
+
+/* 지도 리디자인의 상단바/패널 */
+.app.flowup-theme-light .flow-map-topbar {
+  background: #ffffff !important;
+  color: #17233c !important;
+  border-bottom: 1px solid #dfe6f0 !important;
+}
+
+.app.flowup-theme-light .flow-map-brand strong,
+.app.flowup-theme-light .flow-map-page-name {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-map-home-button {
+  color: #52627a !important;
+}
+
+.app.flowup-theme-light .flow-map-shell .map-sidebar,
+.app.flowup-theme-light .flow-map-sidebar-title,
+.app.flowup-theme-light .flow-map-shell .store-list,
+.app.flowup-theme-light .flow-map-shell .store-list-header {
+  background: #ffffff !important;
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-map-sidebar-title h1,
+.app.flowup-theme-light .flow-map-shell .store-list-header strong {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-map-sidebar-title p,
+.app.flowup-theme-light .flow-map-shell .store-list-header span,
+.app.flowup-theme-light .flow-map-shell .empty-store {
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .flow-map-shell .map-search input {
+  background: #ffffff !important;
+  color: #17233c !important;
+  border-color: #cfd9e8 !important;
+}
+
+.app.flowup-theme-light .flow-map-shell .map-legend {
+  background: #ffffff !important;
+  border-color: #e1e7ef !important;
+}
+
+.app.flowup-theme-light .flow-map-shell .map-legend div {
+  background: #f7f9fc !important;
+  color: #48607c !important;
+  border-color: #dce5f2 !important;
+}
+
+.app.flowup-theme-light .flow-map-shell .store-list-item,
+.app.flowup-theme-light .flow-map-shell .store-list-item.flowup-store {
+  background: #ffffff !important;
+  color: #17233c !important;
+  border-color: #e0e7f1 !important;
+}
+
+.app.flowup-theme-light .flow-map-shell .store-list-item:hover,
+.app.flowup-theme-light .flow-map-shell .store-list-item.flowup-store:hover {
+  background: #f3f8ff !important;
+}
+
+/* 버튼/강조 색상은 라이트 모드에서도 Flowup 파란색 유지 */
+.app.flowup-theme-light button {
+  color-scheme: light;
+}
+
+
+/* =========================================================
+   THEME FIX v2
+   설정 > 화면 테마에서 light/dark 선택 시 즉시 적용
+========================================================= */
+
+/* 앱 전체 */
+.app.flowup-theme-light,
+.app.flowup-theme-light .main {
+  background-color: #f4f7fb !important;
+  color: #17233c !important;
+}
+
+.app.flowup-theme-dark,
+.app.flowup-theme-dark .main {
+  background-color: #0f1b2d;
+  color: #f4f7fb;
+}
+
+/* 설정 페이지 - 라이트 모드 */
+.app.flowup-theme-light .flow-settings-page {
+  color: #17233c !important;
+  background: #f4f7fb !important;
+  background-image: none !important;
+}
+
+.app.flowup-theme-light .flow-settings-page::before,
+.app.flowup-theme-light .flow-settings-page::after {
+  border-color: #d9e4f2 !important;
+}
+
+.app.flowup-theme-light .flow-settings-panel {
+  background: #ffffff !important;
+  border-color: #d9e2ee !important;
+  box-shadow: 0 8px 24px rgba(30, 55, 90, 0.07) !important;
+}
+
+.app.flowup-theme-light .flow-settings-panel-heading {
+  border-bottom-color: #e1e7ef !important;
+}
+
+.app.flowup-theme-light .flow-settings-panel-heading h2,
+.app.flowup-theme-light .flow-settings-sensor-row strong,
+.app.flowup-theme-light .flow-settings-option-title,
+.app.flowup-theme-light .flow-settings-info-list strong {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-settings-panel-heading p,
+.app.flowup-theme-light .flow-settings-sensor-row p,
+.app.flowup-theme-light .flow-settings-option p,
+.app.flowup-theme-light .flow-settings-info-list span {
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .flow-settings-kicker {
+  color: #2385f4 !important;
+}
+
+.app.flowup-theme-light .flow-settings-header h1 {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-settings-header > p {
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .flow-settings-row-icon,
+.app.flowup-theme-light .flow-settings-panel-icon {
+  background: #edf5ff !important;
+  color: #2385f4 !important;
+}
+
+.app.flowup-theme-light .flow-settings-sensor-row + .flow-settings-sensor-row,
+.app.flowup-theme-light .flow-settings-option + .flow-settings-option,
+.app.flowup-theme-light .flow-settings-info-list > div + div {
+  border-top-color: #e1e7ef !important;
+}
+
+/* 테마 선택 버튼 */
+.flow-settings-theme-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 4px 0 10px;
+}
+
+.flow-settings-theme-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 72px;
+  padding: 13px 15px;
+  border: 1px solid #29415f;
+  border-radius: 12px;
+  background: #14243e;
+  color: #f3f7ff;
+  cursor: pointer;
+  text-align: left;
+  transition: 0.2s ease;
+}
+
+.flow-settings-theme-option:hover {
+  border-color: #6ea8f7;
+  transform: translateY(-1px);
+}
+
+.flow-settings-theme-option.active {
+  border-color: #2385f4;
+  background: rgba(35, 133, 244, 0.14);
+  box-shadow: 0 0 0 1px rgba(35, 133, 244, 0.18);
+}
+
+.flow-settings-theme-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  border-radius: 10px;
+  background: rgba(87, 150, 238, 0.15);
+  font-size: 18px;
+}
+
+.flow-settings-theme-option strong {
+  display: block;
+  color: inherit;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.flow-settings-theme-option p {
+  margin: 4px 0 0;
+  color: #9db2ce;
+  font-size: 11px;
+}
+
+.app.flowup-theme-light .flow-settings-theme-option {
+  border-color: #d9e2ee !important;
+  background: #f8fafc !important;
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-settings-theme-option:hover {
+  border-color: #8dbaf0 !important;
+}
+
+.app.flowup-theme-light .flow-settings-theme-option.active {
+  border-color: #2385f4 !important;
+  background: #edf5ff !important;
+}
+
+.app.flowup-theme-light .flow-settings-theme-option p {
+  color: #6b7890 !important;
+}
+
+/* 헤더 라이트 모드 */
+.app.flowup-theme-light .topbar {
+  background: #ffffff !important;
+  color: #17233c !important;
+  border-bottom: 1px solid #dfe6f0 !important;
+}
+
+.app.flowup-theme-light .topbar .logo h2 {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .topbar .logo p {
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .top-menu-item {
+  color: #52627a !important;
+}
+
+.app.flowup-theme-light .top-menu-item:hover {
+  background: #eef4fb !important;
+}
+
+.app.flowup-theme-light .top-menu-item.active {
+  background: #2385f4 !important;
+  color: #ffffff !important;
+}
+
+/* 브라우저 body까지 라이트로 맞춤 */
+body:has(.app.flowup-theme-light) {
+  background: #f4f7fb !important;
+  color: #17233c !important;
+}
+
+body:has(.app.flowup-theme-dark) {
+  background: #0f1b2d;
+  color: #f4f7fb;
+}
+
+@media (max-width: 700px) {
+  .flow-settings-theme-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   라이트 테마 - Dashboard 누락 텍스트 보정
+========================================================= */
+
+.app.flowup-theme-light .flow-dashboard-card-heading,
+.app.flowup-theme-light .flow-dashboard-card-title {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-chevron {
+  border-color: #718096 !important;
+}
+
+/* 방문 현황 */
+.app.flowup-theme-light .flow-dashboard-section-heading h2 {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-view-all {
+  color: #2385f4 !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-view-all:hover {
+  color: #1769c2 !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-stat-label,
+.app.flowup-theme-light
+.flow-dashboard-time-box > span:not(.flow-dashboard-stat-icon) {
+  color: #52627a !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-main-stat strong,
+.app.flowup-theme-light .flow-dashboard-time-box strong {
+  color: #17233c !important;
+}
+
+/* 기존 파란색 / 붐비는 시간 / 한산한 시간 강조색은 유지 */
+.app.flowup-theme-light .flow-dashboard-main-stat .flow-dashboard-accent {
+  color: #2385f4 !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-time-box:first-child strong {
+  color: #e87568 !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-time-box:last-child strong {
+  color: #16a88c !important;
+}
+
+.app.flowup-theme-light
+.flow-dashboard-main-stat small,
+.app.flowup-theme-light
+.flow-dashboard-time-box small {
+  color: #718096 !important;
+}
+
+/* 시간대별 그래프 */
+.app.flowup-theme-light .flow-dashboard-hourly-bar-item > span {
+  color: #718096 !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-graph-note {
+  color: #718096 !important;
+}
+
+/* 주변 현황 */
+.app.flowup-theme-light .flow-dashboard-data-status {
+  color: #2385f4 !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-nearby-grid {
+  background: #f7f9fc !important;
+  border-color: #d9e2ee !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-nearby-grid > div {
+  color: #17233c !important;
+  border-color: #dfe6f0 !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-nearby-grid > div > span:not(.flow-dashboard-nearby-icon) {
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-nearby-grid > div > strong {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-nearby-grid > div > small {
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-nearby-icon {
+  background: #edf5ff !important;
+  color: #2385f4 !important;
+}
+
+/* 요일별 평균 방문객 */
+.app.flowup-theme-light .flow-dashboard-bar-count {
+  color: #2385f4 !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-bar-item small {
+  color: #718096 !important;
+}
+
+/* 방문객 비율 */
+.app.flowup-theme-light .flow-dashboard-ratio-legend > div {
+  color: #52627a !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-ratio-legend strong {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-donut > div {
+  background: #ffffff !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-donut strong {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-donut span {
+  color: #6b7890 !important;
+}
+
+/* 운영 정보 */
+.app.flowup-theme-light .flow-dashboard-operation-item small {
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-operation-item strong {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-dashboard-operation-item p {
+  color: #6b7890 !important;
+}
+
+/* =========================================================
+   실시간 방문자 데이터 - 라이트 테마 보정
+========================================================= */
+
+.app.flowup-theme-light .visitor-db-header h2 {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .visitor-db-header p {
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .visitor-store-info {
+  background: #ffffff !important;
+  color: #17233c !important;
+  border-color: #d9e2ee !important;
+}
+
+.app.flowup-theme-light .visitor-store-info h3 {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .visitor-store-info p {
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .visitor-db-card {
+  background: #ffffff !important;
+  color: #17233c !important;
+  border-color: #d9e2ee !important;
+}
+
+.app.flowup-theme-light .visitor-db-card span {
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .visitor-db-card strong {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .visitor-db-card.current {
+  background: #ffffff !important;
+  border-color: #2385f4 !important;
+}
+
+.app.flowup-theme-light .visitor-db-card.current strong {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .visitor-extra-info {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .visitor-extra-info span {
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .visitor-extra-info strong {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .visitor-last-updated {
+  color: #718096 !important;
+}
+
+/* =========================================================
+   방문 통계 - 라이트 테마 보정
+========================================================= */
+
+/* 페이지 전체 */
+.app.flowup-theme-light .flow-stats-page {
+  color: #17233c !important;
+  background: #f4f7fb !important;
+  background-image: none !important;
+}
+
+.app.flowup-theme-light .flow-stats-page::before,
+.app.flowup-theme-light .flow-stats-page::after {
+  border-color: #d9e4f2 !important;
+}
+
+/* 페이지 제목 */
+.app.flowup-theme-light .flow-stats-kicker {
+  color: #2385f4 !important;
+}
+
+.app.flowup-theme-light .flow-stats-header h1 {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-stats-header p {
+  color: #6b7890 !important;
+}
+
+/* 기간 선택 */
+.app.flowup-theme-light .flow-stats-periods {
+  background: #ffffff !important;
+  border-color: #d9e2ee !important;
+}
+
+.app.flowup-theme-light .flow-stats-periods button {
+  color: #52627a !important;
+}
+
+.app.flowup-theme-light .flow-stats-periods button:hover {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-stats-periods button.active {
+  background: #2385f4 !important;
+  color: #ffffff !important;
+}
+
+/* 상단 통계 카드 */
+.app.flowup-theme-light .flow-stats-summary-card {
+  background: #ffffff !important;
+  border-color: #d9e2ee !important;
+  box-shadow: 0 8px 24px rgba(30, 55, 90, 0.07) !important;
+}
+
+.app.flowup-theme-light .flow-stats-summary-card span {
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .flow-stats-summary-card strong {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-stats-summary-card small {
+  color: #718096 !important;
+}
+
+/* 아이콘 */
+.app.flowup-theme-light .flow-stats-summary-icon {
+  background: #edf5ff !important;
+  color: #2385f4 !important;
+}
+
+.app.flowup-theme-light
+.flow-stats-summary-card:nth-child(2)
+.flow-stats-summary-icon {
+  background: #edf9f6 !important;
+  color: #20ad91 !important;
+}
+
+.app.flowup-theme-light
+.flow-stats-summary-card:nth-child(3)
+.flow-stats-summary-icon {
+  background: #fff7eb !important;
+  color: #e9a94f !important;
+}
+
+/* 분석 패널 */
+.app.flowup-theme-light .flow-stats-panel {
+  background: #ffffff !important;
+  border-color: #d9e2ee !important;
+  box-shadow: 0 8px 24px rgba(30, 55, 90, 0.07) !important;
+}
+
+.app.flowup-theme-light .flow-stats-panel-heading {
+  border-bottom-color: #dfe6f0 !important;
+}
+
+.app.flowup-theme-light .flow-stats-panel-heading h2 {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-stats-panel-heading p {
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .flow-stats-heading-tag {
+  color: #6b9de0 !important;
+}
+
+.app.flowup-theme-light .flow-stats-panel-icon {
+  background: #edf5ff !important;
+  color: #2385f4 !important;
+}
+
+/* 그래프 */
+.app.flowup-theme-light
+.flow-stats-hourly-grid span,
+.app.flowup-theme-light
+.flow-stats-weekly-grid span {
+  border-top-color: #e2e8f0 !important;
+}
+
+.app.flowup-theme-light .flow-stats-y-axis {
+  color: #718096 !important;
+}
+
+.app.flowup-theme-light
+.flow-stats-hourly-item > strong,
+.app.flowup-theme-light
+.flow-stats-weekly-item > strong {
+  color: #2385f4 !important;
+}
+
+.app.flowup-theme-light
+.flow-stats-hourly-item > small,
+.app.flowup-theme-light
+.flow-stats-weekly-item > small {
+  color: #718096 !important;
+}
+
+/* 그래프 막대는 기존 파란색 유지 */
+.app.flowup-theme-light .flow-stats-hourly-fill,
+.app.flowup-theme-light .flow-stats-weekly-fill {
+  background: linear-gradient(
+    180deg,
+    #76b0ff,
+    #3b76cd
+  ) !important;
+}
+
+.app.flowup-theme-light .flow-stats-hourly-fill.is-peak,
+.app.flowup-theme-light .flow-stats-weekly-fill.is-peak {
+  background: linear-gradient(
+    180deg,
+    #b6ddff,
+    #70afff
+  ) !important;
+}
+
+/* 그래프 하단 설명 */
+.app.flowup-theme-light .flow-stats-chart-footer {
+  border-top-color: #e1e7ef !important;
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .flow-stats-dot {
+  background: #5b9cf5 !important;
+}
+
+/* 가장 붐비는 / 한산한 시간 */
+.app.flowup-theme-light .flow-stats-analysis-list {
+  background: transparent !important;
+}
+
+.app.flowup-theme-light .flow-stats-analysis-box {
+  background: #f7f9fc !important;
+  border-color: #d9e2ee !important;
+}
+
+.app.flowup-theme-light
+.flow-stats-analysis-box > div > span {
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .flow-stats-analysis-box small {
+  color: #718096 !important;
+}
+
+/* 붐비는 시간 강조 */
+.app.flowup-theme-light .flow-stats-analysis-icon {
+  background: #fff5e8 !important;
+  color: #e9a94f !important;
+}
+
+.app.flowup-theme-light .flow-stats-analysis-box strong {
+  color: #e99a42 !important;
+}
+
+/* 한산한 시간 강조 */
+.app.flowup-theme-light
+.flow-stats-analysis-box.quiet
+.flow-stats-analysis-icon {
+  background: #eaf9f5 !important;
+  color: #20ad91 !important;
+}
+
+.app.flowup-theme-light
+.flow-stats-analysis-box.quiet strong {
+  color: #20ad91 !important;
+}
+
+/* =========================================================
+   데이터 분석 - 라이트 테마 보정
+========================================================= */
+
+/* 분석 페이지 전체 */
+.app.flowup-theme-light .flow-analysis-page {
+  color: #17233c !important;
+  background:
+    radial-gradient(
+      ellipse 75% 55% at 85% 6%,
+      rgba(55, 130, 220, 0.08),
+      transparent 72%
+    ),
+    linear-gradient(
+      120deg,
+      #f4f7fb,
+      #eef4fb
+    ) !important;
+}
+
+.app.flowup-theme-light .flow-analysis-page::before,
+.app.flowup-theme-light .flow-analysis-page::after {
+  border-color: #d9e4f2 !important;
+}
+
+/* 제목 */
+.app.flowup-theme-light .flow-analysis-kicker {
+  color: #2385f4 !important;
+}
+
+.app.flowup-theme-light .flow-analysis-header h1 {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-analysis-header p {
+  color: #6b7890 !important;
+}
+
+/* 상단 핵심 분석 카드 */
+.app.flowup-theme-light .flow-analysis-summary-card {
+  background: #ffffff !important;
+  border-color: #d9e2ee !important;
+  box-shadow: 0 8px 24px rgba(30, 55, 90, 0.07) !important;
+}
+
+.app.flowup-theme-light .flow-analysis-summary-card > div > span {
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .flow-analysis-summary-card strong {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-analysis-summary-icon {
+  background: #edf5ff !important;
+  color: #2385f4 !important;
+}
+
+.app.flowup-theme-light .flow-analysis-summary-icon.busy {
+  background: #fff7eb !important;
+  color: #e9a94f !important;
+}
+
+.app.flowup-theme-light .flow-analysis-summary-icon.quiet {
+  background: #eaf9f5 !important;
+  color: #20ad91 !important;
+}
+
+/* 공통 패널 */
+.app.flowup-theme-light .flow-analysis-panel {
+  background: #ffffff !important;
+  border-color: #d9e2ee !important;
+  box-shadow: 0 8px 24px rgba(30, 55, 90, 0.07) !important;
+}
+
+.app.flowup-theme-light .flow-analysis-panel-heading {
+  border-bottom-color: #dfe6f0 !important;
+}
+
+.app.flowup-theme-light .flow-analysis-panel-heading h2 {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-analysis-panel-heading p {
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .flow-analysis-panel-icon {
+  background: #edf5ff !important;
+  color: #2385f4 !important;
+}
+
+/* 시간대별 그래프 */
+.app.flowup-theme-light .flow-analysis-chart-grid span {
+  border-top-color: #dfe6f0 !important;
+}
+
+.app.flowup-theme-light .flow-analysis-y-axis {
+  color: #718096 !important;
+}
+
+.app.flowup-theme-light .flow-analysis-hourly-item > strong {
+  color: #2385f4 !important;
+}
+
+.app.flowup-theme-light .flow-analysis-hourly-item > small {
+  color: #718096 !important;
+}
+
+/* 요일별 방문 패턴 */
+.app.flowup-theme-light .flow-analysis-weekday-row > span {
+  color: #52627a !important;
+}
+
+.app.flowup-theme-light .flow-analysis-weekday-row > strong {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-analysis-progress {
+  background: #e8eef6 !important;
+}
+
+.app.flowup-theme-light .flow-analysis-progress > div {
+  background: linear-gradient(
+    90deg,
+    #4686e4,
+    #8fc4ff
+  ) !important;
+}
+
+/* 분석 결과 */
+.app.flowup-theme-light .flow-analysis-result-item {
+  background: #f7f9fc !important;
+  border-color: #d9e2ee !important;
+}
+
+.app.flowup-theme-light .flow-analysis-result-item strong {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-analysis-result-item p {
+  color: #6b7890 !important;
+}
+
+.app.flowup-theme-light .flow-analysis-result-icon {
+  background: #edf5ff !important;
+}
+
+/* 운영 활용 방안 */
+.app.flowup-theme-light .flow-analysis-operation-grid > div {
+  border-right-color: #dfe6f0 !important;
+}
+
+.app.flowup-theme-light .flow-analysis-operation-icon {
+  background: #edf5ff !important;
+  color: #2385f4 !important;
+}
+
+.app.flowup-theme-light .flow-analysis-operation-grid strong {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-analysis-operation-grid p {
+  color: #6b7890 !important;
+}

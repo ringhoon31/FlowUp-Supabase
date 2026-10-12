@@ -1,0 +1,1327 @@
+/* =========================================
+   화면 전체 / 고정 상단바
+========================================= */
+
+#root:has(.flow-dashboard) {
+  width: 100%;
+  max-width: none;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+body:has(.flow-dashboard) {
+  margin: 0;
+  background: #142138;
+}
+
+.app:has(.flow-dashboard) {
+  width: 100%;
+  max-width: none;
+  min-height: 100dvh;
+}
+
+.app:has(.flow-dashboard) > main.main {
+  display: block;
+  width: 100%;
+  max-width: none;
+  min-height: 100dvh;
+  margin: 0;
+  padding: 80px 0 0;
+}
+
+.app:has(.flow-dashboard) > .topbar {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.app:has(.flow-dashboard) > .topbar .logo {
+  min-width: 250px;
+}
+
+/* =========================================
+   대시보드 배경
+========================================= */
+
+.flow-dashboard,
+.flow-dashboard * {
+  box-sizing: border-box;
+}
+
+.flow-dashboard {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  min-height: calc(100dvh - 80px);
+  margin: 0;
+  padding: 30px clamp(20px, 4vw, 72px) 46px;
+  overflow: hidden;
+  color: #f3f7ff;
+  text-align: left;
+  background:
+    radial-gradient(
+      ellipse 75% 55% at 85% 6%,
+      rgba(55, 100, 166, 0.28),
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 80% 75% at 9% 100%,
+      rgba(35, 76, 140, 0.32),
+      transparent 72%
+    ),
+    linear-gradient(
+      120deg,
+      #142138,
+      #1d3253
+    );
+}
+
+.flow-dashboard::before,
+.flow-dashboard::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  width: 145%;
+  height: 540px;
+  border: 1px solid rgba(105, 159, 240, 0.22);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.flow-dashboard::before {
+  top: -410px;
+  left: 16%;
+  transform: rotate(-12deg);
+}
+
+.flow-dashboard::after {
+  right: 12%;
+  bottom: -410px;
+  transform: rotate(-10deg);
+}
+
+.flow-dashboard-inner {
+  width: min(100%, 1460px);
+  max-width: none;
+  margin: 0 auto;
+}
+
+.flow-dashboard-icon {
+  display: block;
+  flex-shrink: 0;
+}
+
+/* =========================================
+   페이지 제목 / 현재 시간
+========================================= */
+
+.flow-dashboard-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 18px;
+}
+
+.flow-dashboard-kicker {
+  display: block;
+  margin-bottom: 7px;
+  color: #82b5ff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.17em;
+}
+
+.flow-dashboard-heading h1 {
+  margin: 0;
+  color: #fff;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1.3;
+}
+
+.flow-dashboard-heading p {
+  margin: 5px 0 0;
+  color: #aebed6;
+  font-size: 13px;
+}
+
+.flow-dashboard-clock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  color: #bccbe0;
+  white-space: nowrap;
+}
+
+.flow-dashboard-clock span {
+  font-size: 12px;
+}
+
+.flow-dashboard-clock strong {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* =========================================
+   현재 매장
+========================================= */
+
+.flow-dashboard-store-section {
+  margin-bottom: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(116, 162, 226, 0.48);
+  border-radius: 16px;
+  background: rgba(28, 49, 81, 0.85);
+}
+
+.flow-dashboard-current-store {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 94px;
+  padding: 17px 20px;
+}
+
+.flow-dashboard-current-store-icon {
+  display: grid;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 12px;
+  background: rgba(104, 158, 238, 0.16);
+  color: #8bbcff;
+}
+
+.flow-dashboard-current-store-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.flow-dashboard-current-store-info {
+  min-width: 0;
+  flex: 1;
+  text-align: left;
+}
+
+.flow-dashboard-store-label {
+  display: block;
+  margin-bottom: 4px;
+  color: #9fbce3;
+  font-size: 11px;
+}
+
+.flow-dashboard-current-store-info strong {
+  display: block;
+  overflow: hidden;
+  color: #fff;
+  font-size: 19px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.flow-dashboard-current-store-info p {
+  margin: 5px 0 0;
+  overflow: hidden;
+  color: #aebed6;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.flow-dashboard-store-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.flow-dashboard-store-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 9px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.flow-dashboard-select-store-button {
+  border: 1px solid #659be7;
+  background: #367ce1;
+  color: white;
+}
+
+.flow-dashboard-select-store-button:hover {
+  background: #468bed;
+}
+
+.flow-dashboard-select-store-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.flow-dashboard-select-store-button[aria-expanded='true'] svg {
+  transform: rotate(180deg);
+}
+
+.flow-dashboard-add-store-button {
+  border: 1px solid rgba(154, 188, 231, 0.38);
+  background: rgba(255, 255, 255, 0.06);
+  color: #e5efff;
+}
+
+.flow-dashboard-add-store-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* =========================================
+   펼쳐진 매장 목록
+========================================= */
+
+.flow-dashboard-store-picker {
+  padding: 18px 20px 20px;
+  border-top: 1px solid rgba(153, 187, 235, 0.2);
+  background: rgba(13, 30, 56, 0.16);
+}
+
+.flow-dashboard-store-picker-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 13px;
+}
+
+.flow-dashboard-store-picker-heading strong {
+  color: #fff;
+  font-size: 15px;
+}
+
+.flow-dashboard-store-picker-heading p {
+  margin: 4px 0 0;
+  color: #aebed6;
+  font-size: 12px;
+}
+
+.flow-dashboard-store-picker-heading > span {
+  color: #91beff;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.flow-dashboard-store-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.flow-dashboard-store-choice {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  min-height: 78px;
+  border: 1px solid rgba(145, 179, 226, 0.28);
+  border-radius: 12px;
+  background: rgba(18, 39, 70, 0.72);
+}
+
+.flow-dashboard-store-choice.is-selected {
+  border-color: #75abf5;
+  background: rgba(58, 112, 191, 0.22);
+}
+
+.flow-dashboard-store-choice-select {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  min-height: 77px;
+  padding: 11px 8px 11px 12px;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.flow-dashboard-store-choice-select:hover {
+  background: rgba(111, 159, 228, 0.08);
+}
+
+.flow-dashboard-store-choice-icon {
+  display: grid;
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 9px;
+  background: rgba(104, 158, 238, 0.16);
+  color: #91beff;
+}
+
+.flow-dashboard-store-choice-icon svg {
+  width: 19px;
+  height: 19px;
+}
+
+.flow-dashboard-store-choice-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.flow-dashboard-store-choice-copy strong,
+.flow-dashboard-store-choice-copy small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.flow-dashboard-store-choice-copy strong {
+  font-size: 13px;
+}
+
+.flow-dashboard-store-choice-copy small {
+  margin-top: 5px;
+  color: #a9bad1;
+  font-size: 11px;
+}
+
+.flow-dashboard-store-choice-check {
+  display: grid;
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  place-items: center;
+  border-radius: 50%;
+  background: #438af0;
+}
+
+.flow-dashboard-store-choice-check svg {
+  width: 13px;
+  height: 13px;
+}
+
+.flow-dashboard-store-delete {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 4px;
+  margin-right: 10px;
+  padding: 7px 8px;
+  border: 1px solid rgba(239, 151, 157, 0.3);
+  border-radius: 7px;
+  background: rgba(210, 75, 84, 0.1);
+  color: #ffbfc3;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.flow-dashboard-store-delete:hover {
+  background: rgba(210, 75, 84, 0.22);
+}
+
+.flow-dashboard-store-delete svg {
+  width: 13px;
+  height: 13px;
+}
+
+.flow-dashboard-data-note {
+  margin: 0 0 15px;
+  color: #9eb3d0;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* =========================================
+   공통 펼침 카드
+========================================= */
+
+.flow-dashboard-card {
+  min-width: 0;
+  margin: 0 0 14px;
+  overflow: hidden;
+  border: 1px solid rgba(116, 162, 226, 0.52);
+  border-radius: 16px;
+  background: rgba(28, 49, 81, 0.83);
+  box-shadow: 0 10px 30px rgba(4, 14, 34, 0.1);
+}
+
+.flow-dashboard-card-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 52px;
+  padding: 0 18px;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.flow-dashboard-card-heading::-webkit-details-marker {
+  display: none;
+}
+
+.flow-dashboard-card-heading::marker {
+  content: '';
+}
+
+.flow-dashboard-card-heading:hover {
+  background: rgba(115, 164, 243, 0.07);
+}
+
+.flow-dashboard-card-heading:focus-visible {
+  outline: 2px solid #91c1ff;
+  outline-offset: -3px;
+}
+
+.flow-dashboard-card[open]
+  > .flow-dashboard-card-heading {
+  border-bottom: 1px solid rgba(137, 175, 230, 0.26);
+}
+
+.flow-dashboard-card-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+  color: #f8fbff;
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.flow-dashboard-title-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
+  color: #76afff;
+}
+
+.flow-dashboard-title-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.flow-dashboard-heading-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.flow-dashboard-chevron {
+  display: inline-block;
+  flex: 0 0 9px;
+  width: 9px;
+  height: 9px;
+  margin: 0 4px;
+  border-right: 2px solid #dce9ff;
+  border-bottom: 2px solid #dce9ff;
+  transform: rotate(45deg);
+  transition: transform 0.2s;
+}
+
+.flow-dashboard-card[open]
+  > .flow-dashboard-card-heading
+  .flow-dashboard-chevron {
+  transform: rotate(225deg);
+}
+
+/* =========================================
+   방문 현황: 원래 아이콘·텍스트 배치
+========================================= */
+
+.flow-dashboard-visit-layout {
+  display: grid;
+  grid-template-columns:
+    minmax(220px, 0.95fr)
+    minmax(0, 2.55fr)
+    minmax(220px, 1fr);
+  align-items: stretch;
+  gap: 18px;
+  padding: 16px 18px 18px;
+}
+
+.flow-dashboard-visit-stats,
+.flow-dashboard-time-analysis {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px;
+}
+
+.flow-dashboard-main-stat,
+.flow-dashboard-time-box {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  min-height: 100px;
+  padding: 13px 15px 13px 60px;
+  border: 1px solid rgba(135, 177, 239, 0.22);
+  border-radius: 12px;
+  background: rgba(58, 91, 143, 0.15);
+  text-align: left;
+}
+
+.flow-dashboard-stat-icon {
+  position: absolute;
+  top: 50%;
+  left: 13px;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(104, 158, 238, 0.17);
+  color: #8abaff;
+  transform: translateY(-50%);
+}
+
+.flow-dashboard-stat-icon svg {
+  width: 19px;
+  height: 19px;
+}
+
+.flow-dashboard-stat-label,
+.flow-dashboard-time-box
+  > span:not(.flow-dashboard-stat-icon) {
+  color: #c2d0e4;
+  font-size: 12px;
+}
+
+.flow-dashboard-main-stat strong,
+.flow-dashboard-time-box strong {
+  display: block;
+  margin: 6px 0 4px;
+  color: #fff;
+  font-size: 27px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.12;
+}
+
+.flow-dashboard-main-stat .flow-dashboard-accent {
+  color: #80b8ff;
+  font-size: 23px;
+}
+
+.flow-dashboard-main-stat small,
+.flow-dashboard-time-box small {
+  color: #9eb5d5;
+  font-size: 11px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.flow-dashboard-time-box:first-child strong {
+  color: #ffb3a5;
+}
+
+.flow-dashboard-time-box:last-child strong {
+  color: #8fe5d0;
+}
+
+/* =========================================
+   시간대별 방문객 그래프
+========================================= */
+
+.flow-dashboard-hourly {
+  min-width: 0;
+  padding: 3px 5px;
+  text-align: left;
+}
+
+.flow-dashboard-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 11px;
+}
+
+.flow-dashboard-section-heading h2 {
+  margin: 0;
+  color: #eef5ff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.flow-dashboard-view-all {
+  padding: 4px 0 4px 8px;
+  border: 0;
+  background: transparent;
+  color: #92c4ff;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.flow-dashboard-view-all:hover {
+  color: #fff;
+}
+
+.flow-dashboard-hourly-bars {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  align-items: end;
+  gap: 10px;
+  min-height: 165px;
+  padding: 14px 5px 0;
+  border-bottom: 1px solid rgba(152, 187, 238, 0.28);
+  background:
+    linear-gradient(
+      to bottom,
+      transparent calc(25% - 1px),
+      rgba(145, 179, 223, 0.12) 25%,
+      transparent calc(25% + 1px),
+      transparent calc(50% - 1px),
+      rgba(145, 179, 223, 0.12) 50%,
+      transparent calc(50% + 1px),
+      transparent calc(75% - 1px),
+      rgba(145, 179, 223, 0.12) 75%,
+      transparent calc(75% + 1px)
+    );
+}
+
+.flow-dashboard-hourly-bar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+  height: 100%;
+}
+
+.flow-dashboard-hourly-bar-track {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.flow-dashboard-hourly-bar-fill {
+  width: min(65%, 34px);
+  min-height: 3px;
+  border-radius: 5px 5px 0 0;
+  background: linear-gradient(180deg, #82b6ff, #3973cf);
+}
+
+.flow-dashboard-hourly-bar-fill.is-peak {
+  background: linear-gradient(180deg, #9bd1ff, #5895ed);
+  box-shadow: 0 0 14px rgba(140, 202, 255, 0.4);
+}
+
+.flow-dashboard-hourly-bar-item > span {
+  margin: 7px 0 -21px;
+  color: #adc1dc;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.flow-dashboard-graph-note {
+  margin: 29px 0 0;
+  color: #93afcf;
+  font-size: 11px;
+  text-align: right;
+}
+
+/* =========================================
+   주변 현황: 원래 아이콘·텍스트 배치
+========================================= */
+
+.flow-dashboard-data-status {
+  color: #94b9e9;
+  font-size: 11px;
+}
+
+.flow-dashboard-nearby-body {
+  padding: 13px 18px 17px;
+}
+
+.flow-dashboard-error {
+  margin: 0 0 12px;
+  padding: 9px 12px;
+  border: 1px solid rgba(255, 148, 148, 0.28);
+  border-radius: 8px;
+  background: rgba(255, 87, 87, 0.1);
+  color: #ffc4c4;
+  font-size: 12px;
+}
+
+.flow-dashboard-nearby-grid {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1.3fr)
+    minmax(0, 1fr)
+    minmax(0, 0.9fr);
+  min-height: 140px;
+  border: 1px solid rgba(135, 177, 239, 0.22);
+  border-radius: 12px;
+  background: rgba(31, 53, 88, 0.34);
+}
+
+.flow-dashboard-nearby-grid > div {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: 12px 17px 12px 57px;
+  border-right: 1px solid rgba(153, 187, 235, 0.27);
+  text-align: left;
+}
+
+.flow-dashboard-nearby-grid > div:last-child {
+  border-right: 0;
+}
+
+.flow-dashboard-nearby-icon {
+  position: absolute;
+  top: 50%;
+  left: 13px;
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(104, 158, 238, 0.16);
+  color: #8dbdff;
+  transform: translateY(-50%);
+}
+
+.flow-dashboard-nearby-icon svg {
+  width: 19px;
+  height: 19px;
+}
+
+.flow-dashboard-nearby-grid
+  span:not(.flow-dashboard-nearby-icon),
+.flow-dashboard-nearby-grid small {
+  display: block;
+  color: #9eb3d0;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.flow-dashboard-nearby-grid strong {
+  display: block;
+  margin-top: 5px;
+  color: #f6faff;
+  font-size: 17px;
+  font-weight: 750;
+  overflow-wrap: anywhere;
+}
+
+.flow-dashboard-nearby-grid small {
+  margin-top: 5px;
+}
+
+/* =========================================
+   요일별 그래프 / 방문객 비율
+========================================= */
+
+.flow-dashboard-two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.flow-dashboard-two-columns > .flow-dashboard-card {
+  margin-bottom: 14px;
+}
+
+.flow-dashboard-weekly-body {
+  padding: 15px 22px 30px;
+}
+
+.flow-dashboard-bars {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  align-items: end;
+  gap: 12px;
+  height: 150px;
+  border-bottom: 1px solid rgba(152, 187, 238, 0.28);
+}
+
+.flow-dashboard-bar-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: end;
+  min-width: 0;
+  height: 100%;
+}
+
+.flow-dashboard-bar-count {
+  margin-bottom: 5px;
+  color: #bdd6f6;
+  font-size: 10px;
+}
+
+.flow-dashboard-bar-track {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  width: 100%;
+  height: 110px;
+}
+
+.flow-dashboard-bar-fill {
+  width: min(65%, 34px);
+  min-height: 2px;
+  border-radius: 5px 5px 0 0;
+  background: linear-gradient(180deg, #83bcff, #3472c9);
+}
+
+.flow-dashboard-bar-item small {
+  position: absolute;
+  top: calc(100% + 5px);
+  color: #adc1dc;
+  font-size: 10px;
+}
+
+.flow-dashboard-ratio-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(25px, 5vw, 72px);
+  min-height: 196px;
+  padding: 14px 20px;
+}
+
+.flow-dashboard-donut {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 148px;
+  height: 148px;
+  border-radius: 50%;
+}
+
+.flow-dashboard-donut > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 105px;
+  height: 105px;
+  border-radius: 50%;
+  background: #1c3151;
+}
+
+.flow-dashboard-donut strong {
+  color: #fff;
+  font-size: 24px;
+}
+
+.flow-dashboard-donut span {
+  margin-top: 3px;
+  color: #a9c0dd;
+  font-size: 11px;
+}
+
+.flow-dashboard-ratio-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 130px;
+}
+
+.flow-dashboard-ratio-legend > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #d0dcef;
+  font-size: 13px;
+}
+
+.flow-dashboard-ratio-legend strong {
+  margin-left: auto;
+  color: #fff;
+  font-size: 20px;
+}
+
+.flow-dashboard-legend-dot {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.flow-dashboard-legend-dot.entry {
+  background: #68a9ff;
+}
+
+.flow-dashboard-legend-dot.exit {
+  background: #325b95;
+}
+
+/* =========================================
+   운영 정보 / 추가 정보
+========================================= */
+
+.flow-dashboard-operation-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.4fr;
+  padding: 14px 17px;
+}
+
+.flow-dashboard-operation-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+  padding: 2px 20px;
+  border-right: 1px solid rgba(153, 187, 235, 0.27);
+  text-align: left;
+}
+
+.flow-dashboard-operation-item:first-child {
+  padding-left: 4px;
+}
+
+.flow-dashboard-operation-item:last-child {
+  padding-right: 4px;
+  border-right: 0;
+}
+
+.flow-dashboard-operation-icon {
+  display: grid;
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(104, 158, 238, 0.16);
+  color: #91bdff;
+  font-size: 21px;
+}
+
+.flow-dashboard-operation-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.flow-dashboard-operation-item > div {
+  min-width: 0;
+}
+
+.flow-dashboard-operation-item small {
+  display: block;
+  margin-bottom: 5px;
+  color: #9eb3d0;
+  font-size: 11px;
+}
+
+.flow-dashboard-operation-item strong {
+  color: #eaf3ff;
+  font-size: 19px;
+  font-weight: 750;
+}
+
+.flow-dashboard-operation-item p {
+  margin: 5px 0 0;
+  color: #adbfda;
+  font-size: 11px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================
+   실시간 방문자 데이터
+========================================= */
+
+.flow-dashboard-realtime-body {
+  padding: 18px;
+}
+
+.flow-dashboard-realtime-body > * {
+  max-width: 100%;
+}
+
+/* =========================================
+   삭제 확인창
+========================================= */
+
+.flow-dashboard-modal-backdrop {
+  position: fixed;
+  z-index: 2000;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(2, 10, 24, 0.75);
+}
+
+.flow-dashboard-delete-modal {
+  width: min(100%, 420px);
+  padding: 27px;
+  border: 1px solid rgba(139, 177, 229, 0.38);
+  border-radius: 16px;
+  background: #1b2d49;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.36);
+  text-align: left;
+}
+
+.flow-dashboard-delete-modal-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 12px;
+  background: rgba(219, 90, 105, 0.14);
+  color: #ffadb5;
+}
+
+.flow-dashboard-delete-modal h2 {
+  margin: 15px 0 7px;
+  color: #fff;
+  font-size: 21px;
+}
+
+.flow-dashboard-delete-modal p {
+  margin: 0 0 23px;
+  color: #b9c9de;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.flow-dashboard-delete-modal p strong {
+  color: #fff;
+}
+
+.flow-dashboard-delete-modal label {
+  display: block;
+  margin-bottom: 8px;
+  color: #e4efff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.flow-dashboard-delete-modal input {
+  width: 100%;
+  height: 45px;
+  padding: 0 13px;
+  border: 1px solid rgba(148, 181, 224, 0.42);
+  border-radius: 9px;
+  outline: 0;
+  background: #14243e;
+  color: #fff;
+  font-size: 14px;
+}
+
+.flow-dashboard-delete-modal input:focus {
+  border-color: #83b6ff;
+  box-shadow: 0 0 0 3px rgba(105, 164, 250, 0.16);
+}
+
+.flow-dashboard-delete-error {
+  display: block;
+  margin-top: 8px;
+  color: #ffadb5;
+  font-size: 12px;
+}
+
+.flow-dashboard-delete-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  margin-top: 22px;
+}
+
+.flow-dashboard-delete-actions button {
+  min-height: 41px;
+  padding: 0 15px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.flow-dashboard-delete-cancel {
+  border: 1px solid rgba(154, 188, 231, 0.4);
+  background: transparent;
+  color: #e5eeff;
+}
+
+.flow-dashboard-delete-confirm {
+  border: 1px solid #d95c6d;
+  background: #c9465c;
+  color: #fff;
+}
+
+.flow-dashboard-delete-confirm:hover {
+  background: #dd5369;
+}
+
+.flow-dashboard button:focus-visible,
+.flow-dashboard input:focus-visible {
+  outline: 2px solid #9cc6ff;
+  outline-offset: 2px;
+}
+
+/* =========================================
+   태블릿 / 모바일
+========================================= */
+
+@media (max-width: 1100px) {
+  .flow-dashboard-visit-layout {
+    grid-template-columns:
+      minmax(180px, 0.9fr)
+      minmax(0, 2fr);
+  }
+
+  .flow-dashboard-time-analysis {
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+  }
+
+  .flow-dashboard-nearby-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .flow-dashboard-nearby-grid > div:nth-child(2) {
+    border-right: 0;
+  }
+
+  .flow-dashboard-nearby-grid > div:nth-child(n + 3) {
+    border-top: 1px solid rgba(153, 187, 235, 0.27);
+  }
+
+  .flow-dashboard-store-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 850px) {
+  .flow-dashboard-two-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .flow-dashboard-operation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .flow-dashboard-operation-item {
+    padding: 14px 4px;
+    border-right: 0;
+  }
+
+  .flow-dashboard-operation-item + .flow-dashboard-operation-item {
+    border-top: 1px solid rgba(153, 187, 235, 0.27);
+  }
+}
+
+@media (max-width: 700px) {
+  .flow-dashboard {
+    padding: 23px 14px 38px;
+  }
+
+  .flow-dashboard-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .flow-dashboard-clock {
+    align-items: flex-start;
+  }
+
+  .flow-dashboard-current-store {
+    flex-wrap: wrap;
+    padding: 15px;
+  }
+
+  .flow-dashboard-current-store-info {
+    flex-basis: calc(100% - 62px);
+  }
+
+  .flow-dashboard-store-actions {
+    width: 100%;
+  }
+
+  .flow-dashboard-store-actions button {
+    flex: 1;
+  }
+
+  .flow-dashboard-store-picker {
+    padding: 15px;
+  }
+
+  .flow-dashboard-store-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .flow-dashboard-visit-layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .flow-dashboard-visit-stats,
+  .flow-dashboard-time-analysis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+  }
+
+  .flow-dashboard-hourly {
+    min-height: 235px;
+  }
+
+  .flow-dashboard-nearby-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .flow-dashboard-nearby-grid > div {
+    min-height: 78px;
+    border-right: 0;
+  }
+
+  .flow-dashboard-nearby-grid > div + div {
+    border-top: 1px solid rgba(153, 187, 235, 0.27);
+  }
+
+  .flow-dashboard-data-status {
+    max-width: 130px;
+    text-align: right;
+  }
+}
+
+@media (max-width: 480px) {
+  .flow-dashboard-visit-stats,
+  .flow-dashboard-time-analysis {
+    grid-template-columns: 1fr;
+  }
+
+  .flow-dashboard-ratio-body {
+    flex-wrap: wrap;
+  }
+
+  .flow-dashboard-store-actions {
+    flex-direction: column;
+  }
+
+  .flow-dashboard-store-actions button {
+    width: 100%;
+  }
+}

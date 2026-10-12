@@ -1,0 +1,491 @@
+/* =========================================
+   페이지 전체 폭 / 배경
+========================================= */
+
+#root:has(.flow-settings-page) {
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.app:has(.flow-settings-page) {
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.app:has(.flow-settings-page) > main.main {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+body:has(.flow-settings-page) {
+  margin: 0;
+  background: #142138;
+}
+
+.flow-settings-page,
+.flow-settings-page * {
+  box-sizing: border-box;
+}
+
+.flow-settings-page {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  min-height: calc(100vh - 74px);
+  margin: 0;
+  padding: 76px clamp(20px, 4vw, 72px) 60px;
+  overflow: hidden;
+  color: #f3f7ff;
+  background:
+    radial-gradient(
+      ellipse 75% 55% at 85% 6%,
+      rgba(55, 100, 166, 0.28),
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 80% 75% at 9% 100%,
+      rgba(35, 76, 140, 0.32),
+      transparent 72%
+    ),
+    linear-gradient(120deg, #142138, #1d3253);
+}
+
+.flow-settings-page::before,
+.flow-settings-page::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 145%;
+  height: 540px;
+  border: 1px solid rgba(105, 159, 240, 0.2);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.flow-settings-page::before {
+  top: -410px;
+  left: 16%;
+  transform: rotate(-12deg);
+}
+
+.flow-settings-page::after {
+  right: 12%;
+  bottom: -410px;
+  transform: rotate(-10deg);
+}
+
+.flow-settings-inner {
+  width: min(100%, 1460px);
+  margin: 0 auto;
+}
+
+.flow-settings-icon {
+  display: block;
+  flex: none;
+}
+
+/* =========================================
+   페이지 제목
+========================================= */
+
+.flow-settings-header {
+  margin-bottom: 24px;
+}
+
+.flow-settings-kicker {
+  display: block;
+  margin-bottom: 7px;
+  color: #86b8ff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.17em;
+}
+
+.flow-settings-header h1 {
+  margin: 0;
+  color: #fff;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1.25;
+}
+
+.flow-settings-header p {
+  margin: 7px 0 0;
+  color: #adbfda;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* =========================================
+   패널 배치
+========================================= */
+
+.flow-settings-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+
+.flow-settings-panel {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(132, 175, 239, 0.43);
+  border-radius: 16px;
+  background: rgba(28, 49, 81, 0.87);
+  box-shadow: 0 10px 30px rgba(4, 14, 34, 0.1);
+}
+
+.flow-settings-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 80px;
+  padding: 15px 22px;
+  border-bottom: 1px solid rgba(137, 175, 230, 0.23);
+}
+
+.flow-settings-panel-heading-main {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+}
+
+.flow-settings-panel-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  border-radius: 11px;
+  background: rgba(87, 150, 238, 0.15);
+  color: #8cbdff;
+}
+
+.flow-settings-panel-heading h2 {
+  margin: 0;
+  color: #f6faff;
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.flow-settings-panel-heading p {
+  margin: 4px 0 0;
+  color: #98aecb;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.flow-settings-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+  padding: 7px 11px;
+  border: 1px solid rgba(99, 223, 183, 0.3);
+  border-radius: 999px;
+  background: rgba(38, 143, 112, 0.13);
+  color: #91e5cb;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.flow-settings-status-badge > span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #6fdfb8;
+}
+
+/* =========================================
+   센서 상태
+========================================= */
+
+.flow-settings-panel-body {
+  padding: 9px 22px;
+}
+
+.flow-settings-sensor-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-height: 84px;
+  padding: 13px 0;
+}
+
+.flow-settings-sensor-row + .flow-settings-sensor-row,
+.flow-settings-option + .flow-settings-option {
+  border-top: 1px solid rgba(
+    145,
+    182,
+    232,
+    0.17
+  );
+}
+
+.flow-settings-row-icon {
+  display: grid;
+  place-items: center;
+  width: 39px;
+  height: 39px;
+  flex: 0 0 39px;
+  border-radius: 11px;
+  background: rgba(84, 150, 236, 0.14);
+  color: #93c3ff;
+}
+
+.flow-settings-sensor-row > div {
+  min-width: 0;
+}
+
+.flow-settings-sensor-row strong,
+.flow-settings-option-title {
+  display: block;
+  color: #f3f8ff;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.flow-settings-sensor-row p,
+.flow-settings-option p {
+  margin: 5px 0 0;
+  color: #9db2ce;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.flow-settings-row-status {
+  margin-left: auto;
+  color: #88e0c4;
+  font-size: 12px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+/* =========================================
+   알림 토글
+========================================= */
+
+.flow-settings-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 84px;
+  padding: 13px 0;
+}
+
+.flow-settings-option > div {
+  min-width: 0;
+}
+
+.flow-settings-option-title {
+  cursor: pointer;
+}
+
+.flow-settings-toggle {
+  position: relative;
+  display: block;
+  width: 48px;
+  height: 28px;
+  flex: 0 0 48px;
+  cursor: pointer;
+}
+
+.flow-settings-toggle input {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.flow-settings-toggle-track {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  background: #5e708b;
+  transition: background 0.2s ease;
+}
+
+.flow-settings-toggle-track::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
+  transition: transform 0.2s ease;
+}
+
+.flow-settings-toggle input:checked
+  + .flow-settings-toggle-track {
+  background: #397fe7;
+}
+
+.flow-settings-toggle input:checked
+  + .flow-settings-toggle-track::after {
+  transform: translateX(20px);
+}
+
+.flow-settings-toggle input:focus-visible
+  + .flow-settings-toggle-track {
+  outline: 2px solid #b6d6ff;
+  outline-offset: 3px;
+}
+
+/* =========================================
+   매장 정보 / 시스템 정보
+========================================= */
+
+.flow-settings-info-list {
+  padding: 9px 22px;
+}
+
+.flow-settings-info-list > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 56px;
+  padding: 10px 0;
+}
+
+.flow-settings-info-list > div + div {
+  border-top: 1px solid rgba(
+    145,
+    182,
+    232,
+    0.17
+  );
+}
+
+.flow-settings-info-list span {
+  color: #b1c2dc;
+  font-size: 12px;
+}
+
+.flow-settings-info-list strong {
+  color: #f3f8ff;
+  font-size: 13px;
+  font-weight: 750;
+  text-align: right;
+}
+
+.flow-settings-info-list
+  .flow-settings-good {
+  color: #8ce1c7;
+}
+
+/* =========================================
+   반응형
+========================================= */
+
+@media (max-width: 850px) {
+  .flow-settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .flow-settings-page {
+    padding: 65px 14px 38px;
+  }
+
+  .flow-settings-header h1 {
+    font-size: 27px;
+  }
+
+  .flow-settings-panel-heading {
+    min-height: 76px;
+    padding: 13px 16px;
+  }
+
+  .flow-settings-panel-body,
+  .flow-settings-info-list {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+}.app:has(.flow-settings-page) .flow-settings-page {
+  padding-top: 90px;
+}
+
+/* =========================================================
+   라이트 테마 직접 보정
+   common.css의 테마 클래스와 함께 사용됩니다.
+========================================================= */
+
+.app.flowup-theme-light .flow-settings-page {
+  background: #f4f7fb !important;
+  background-image: none !important;
+  color: #17233c !important;
+}
+
+body:has(.app.flowup-theme-light) {
+  background: #f4f7fb !important;
+}
+
+.app.flowup-theme-light .flow-settings-panel {
+  background: #ffffff !important;
+  border-color: #d9e2ee !important;
+}
+
+.app.flowup-theme-light .flow-settings-panel-heading {
+  border-bottom-color: #e1e7ef !important;
+}
+
+.app.flowup-theme-light .flow-settings-header h1,
+.app.flowup-theme-light .flow-settings-panel-heading h2,
+.app.flowup-theme-light .flow-settings-sensor-row strong,
+.app.flowup-theme-light .flow-settings-option-title,
+.app.flowup-theme-light .flow-settings-info-list strong {
+  color: #17233c !important;
+}
+
+.app.flowup-theme-light .flow-settings-header p,
+.app.flowup-theme-light .flow-settings-panel-heading p,
+.app.flowup-theme-light .flow-settings-sensor-row p,
+.app.flowup-theme-light .flow-settings-option p,
+.app.flowup-theme-light .flow-settings-info-list span {
+  color: #6b7890 !important;
+}
+
+/* 설정 페이지 - 서버 연결 오류 */
+.flow-settings-status-warning {
+  color: #ff6b6b !important;
+  border-color: rgba(255, 107, 107, 0.35) !important;
+  background: rgba(255, 107, 107, 0.08) !important;
+}
+
+/* 센서/데이터 수집 행의 오류 상태 */
+.flow-settings-status-warning-text {
+  color: #ff6b6b !important;
+  font-weight: 700;
+}
+/* 연결 오류 상태의 점 */
+.flow-settings-status-warning > span {
+  background-color: #ff6b6b !important;
+}

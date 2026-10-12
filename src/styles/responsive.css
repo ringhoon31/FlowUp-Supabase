@@ -1,0 +1,107 @@
+/* =========================
+   반응형
+========================= */
+
+/* =========================
+   반응형
+========================= */
+
+@media (max-width: 1000px) {
+
+  .status-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .content-grid,
+  .stats-content {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+@media (max-width: 700px) {
+
+  .topbar {
+    padding: 0 15px;
+  }
+
+  .topbar .logo {
+    min-width: auto;
+  }
+
+  .topbar .logo p {
+    display: none;
+  }
+
+  .top-menu {
+    gap: 2px;
+  }
+
+  .top-menu-item {
+    padding: 10px;
+    font-size: 12px;
+  }
+
+  .main {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .status-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+}
+
+@media (max-width: 900px) {
+
+  .analysis-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .analysis-two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .operation-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+@media (max-width: 700px) {
+
+  .settings-page {
+    padding: 15px;
+  }
+
+  .store-info,
+  .system-info {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-panel-title {
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+/* 모바일 */
+@media (max-width: 700px) {
+
+  .seoul-population-content {
+    grid-template-columns: 1fr;
+  }
+
+}
+}

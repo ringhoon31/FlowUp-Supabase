@@ -1,0 +1,356 @@
+.visitor-db-panel {
+  margin-top: 24px;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+/* 헤더 */
+
+.visitor-db-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.visitor-db-header h2 {
+  margin: 0 0 6px;
+  font-size: 22px;
+  color: #111827;
+}
+
+.visitor-db-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.visitor-refresh-button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  background: #2583e9;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.visitor-refresh-button:hover {
+  background: #1976d2;
+}
+
+/* 매장 정보 */
+
+.visitor-store-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  margin-bottom: 18px;
+  background: #f8fafc;
+  border-radius: 12px;
+}
+
+.visitor-store-info > span {
+  font-size: 26px;
+}
+
+.visitor-store-info strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 17px;
+  color: #111827;
+}
+
+.visitor-store-info p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+/* 방문자 카드 */
+
+.visitor-db-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.visitor-db-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+}
+
+.visitor-db-card.current {
+  border-color: #2583e9;
+  background: #eff6ff;
+}
+
+.visitor-db-icon {
+  font-size: 28px;
+}
+
+.visitor-db-card p {
+  margin: 0 0 5px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.visitor-db-card strong {
+  color: #111827;
+  font-size: 24px;
+}
+
+/* 최근 로그 */
+
+.visitor-log-section {
+  margin-top: 10px;
+}
+
+.visitor-log-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.visitor-log-header h3 {
+  margin: 0;
+  font-size: 17px;
+  color: #111827;
+}
+
+.visitor-log-header span {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.visitor-log-table {
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.visitor-log-row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  align-items: center;
+  padding: 13px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+.visitor-log-row:last-child {
+  border-bottom: none;
+}
+
+.visitor-log-title {
+  background: #f8fafc;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.visitor-log-row span {
+  color: #374151;
+}
+
+/* 로딩 / 오류 */
+
+.visitor-db-message {
+  padding: 30px;
+  text-align: center;
+  color: #6b7280;
+}
+
+.visitor-db-error {
+  padding: 18px;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #dc2626;
+  line-height: 1.6;
+}
+
+.visitor-db-error small {
+  color: #991b1b;
+}
+
+/* 반응형 */
+
+@media (max-width: 800px) {
+  .visitor-db-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .visitor-db-header {
+    align-items: flex-start;
+    gap: 12px;
+    flex-direction: column;
+  }
+
+  .visitor-log-row {
+    grid-template-columns: 1.3fr 1fr 1fr;
+  }
+
+  .visitor-log-row span:last-child {
+    display: none;
+  }
+}
+
+/* =========================================
+   실시간 방문자 데이터 - Dashboard 테마 적용
+========================================= */
+
+.visitor-db-panel {
+  background: #1d3658;
+  border: 1px solid #365a87;
+  border-radius: 20px;
+  color: #ffffff;
+}
+
+.visitor-db-header {
+  color: #ffffff;
+}
+
+.visitor-db-header h2 {
+  color: #ffffff;
+}
+
+.visitor-db-header p {
+  color: #b9cbe3;
+}
+
+/* 매장 정보 */
+.visitor-store-info {
+  background: #233f65;
+  border: 1px solid #3c6190;
+  color: #ffffff;
+}
+
+.visitor-store-info h3 {
+  color: #ffffff;
+}
+
+.visitor-store-info p {
+  color: #b9cbe3;
+}
+
+/* 방문자 카드 */
+.visitor-db-card {
+  background: #223d62;
+  border: 1px solid #3b5f8d;
+  color: #ffffff;
+}
+
+.visitor-db-card span {
+  color: #b9cbe3;
+}
+
+.visitor-db-card strong {
+  color: #ffffff;
+}
+
+.visitor-db-card.current {
+  background: #244873;
+  border-color: #2f8cff;
+}
+
+.visitor-db-card.current strong {
+  color: #ffffff;
+}
+
+/* 하단 상태 영역 */
+.visitor-extra-info {
+  color: #ffffff;
+}
+
+.visitor-extra-info span {
+  color: #b9cbe3;
+}
+
+.visitor-extra-info strong {
+  color: #ffffff;
+}
+
+.visitor-last-updated {
+  color: #91a9c7;
+}
+
+/* 새로고침 버튼 */
+.visitor-refresh-button {
+  background: #2d85ed;
+  color: #ffffff;
+  border: none;
+}
+
+.visitor-refresh-button:hover {
+  background: #4397f5;
+}
+
+/* 로딩 */
+.visitor-db-loading {
+  background: #223d62;
+  color: #c7d7eb;
+}
+
+/* 오류 */
+.visitor-db-error {
+  background: #3b2b38;
+  color: #ffb8b8;
+  border-color: #754653;
+}
+
+/* 센서/API 연결 상태: 연결이 없어도 페이지는 유지 */
+.flow-api-status-banner,
+.visitor-connection-status {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 16px;
+  margin: 12px 0 18px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 14px;
+}
+
+.flow-api-status-banner.is-connected,
+.visitor-connection-status.is-connected {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.flow-api-status-banner.is-connecting,
+.visitor-connection-status.is-connecting {
+  border-color: #bfdbfe;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.flow-api-status-banner.is-disconnected,
+.visitor-connection-status.is-disconnected {
+  border-color: #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.flow-api-status-dot,
+.visitor-connection-dot {
+  display: inline-block;
+  flex: 0 0 9px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: currentColor;
+}

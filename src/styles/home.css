@@ -1,0 +1,695 @@
+/* 메인 화면에서는 기존 프로젝트의 가운데 폭 제한을 해제 */
+#root:has(.flow-home) {
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  margin: 0;
+  border: 0;
+  text-align: left;
+}
+
+.main:has(.flow-home) {
+  padding: 0;
+}
+
+.flow-home,
+.flow-home * {
+  box-sizing: border-box;
+}
+
+.flow-home {
+  display: grid;
+  grid-template-columns: 51% 49%;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  font-family: Arial, "Malgun Gothic", sans-serif;
+  letter-spacing: -0.025em;
+}
+
+.flow-home button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* 왼쪽과 오른쪽 공통 */
+.flow-home-left,
+.flow-home-right {
+  position: relative;
+  min-width: 0;
+  min-height: 100vh;
+}
+
+.flow-home-left {
+  overflow: hidden;
+  background: #fbfdff;
+  border-right: 6px solid #fff;
+  color: #14233d;
+}
+
+.flow-home-right {
+  overflow: hidden;
+  background:
+    radial-gradient(
+      ellipse at 88% 15%,
+      rgba(45, 104, 193, 0.24),
+      transparent 42%
+    ),
+    linear-gradient(145deg, #0c1a30, #112748 65%, #0c1b35);
+  color: #f9fbff;
+}
+
+/* 오른쪽 배경 곡선: 그래프 막대와 별개의 장식 */
+.flow-home-right::before,
+.flow-home-right::after {
+  position: absolute;
+  display: block;
+  content: "";
+  pointer-events: none;
+}
+
+.flow-home-right::before {
+  width: 105%;
+  height: 250px;
+  top: 145px;
+  right: -30%;
+  border-top: 2px solid rgba(74, 146, 255, 0.6);
+  border-radius: 50%;
+  transform: rotate(-12deg);
+}
+
+.flow-home-right::after {
+  width: 80%;
+  height: 170px;
+  top: 315px;
+  right: -18%;
+  border-bottom: 2px solid rgba(72, 137, 242, 0.35);
+  border-radius: 50%;
+  transform: rotate(9deg);
+}
+
+/* 로고 */
+.flow-home-brand {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  height: 76px;
+  padding-left: clamp(24px, 4vw, 68px);
+  border-bottom: 1px solid #eef2f7;
+  color: #112039;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.06em;
+}
+
+.flow-home-symbol {
+  display: flex;
+  width: 42px;
+  height: 30px;
+  color: #168be9;
+}
+
+.flow-home-symbol svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* 안내 문구: 배지 바로 아래에 배치 */
+.flow-home-left-copy {
+  position: relative;
+  z-index: 4;
+  padding: 31px clamp(28px, 4vw, 68px) 0;
+}
+
+.flow-home-right-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 890px;
+  margin: 0 auto;
+  padding: 107px clamp(34px, 4.2vw, 78px) 40px;
+}
+
+.flow-home-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 8px 17px;
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.flow-home-badge > span {
+  font-size: 18px;
+  letter-spacing: -0.1em;
+}
+
+.flow-home-badge-left {
+  background: #e9f4ff;
+  color: #1973ce;
+}
+
+.flow-home-badge-right {
+  background: #1b3559;
+  color: #9bcaff;
+}
+
+.flow-home-left-copy p,
+.flow-home-manager-description {
+  margin: 24px 0 19px;
+  line-height: 1.6;
+  font-size: clamp(18px, 1.45vw, 23px);
+  font-weight: 400;
+}
+
+.flow-home-left-copy p {
+  color: #293b58;
+}
+
+.flow-home-manager-description {
+  margin-top: 24px;
+  color: #d2ddec;
+}
+
+.flow-home-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  height: 61px;
+  min-width: 245px;
+  padding: 0 25px;
+  border: 0;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 800;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.flow-home-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.flow-home-button:focus-visible {
+  outline: 3px solid #70b6ff;
+  outline-offset: 4px;
+}
+
+.flow-home-find {
+  background: linear-gradient(120deg, #2478ee, #0759dc);
+  color: #fff;
+}
+
+.flow-home-login {
+  background: #fff;
+  color: #11213c;
+}
+
+/* 왼쪽 지도 미리보기 */
+.flow-home-map {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: clamp(440px, 58vh, 610px);
+  overflow: hidden;
+  background: #f4f7f4;
+}
+
+.flow-home-map::before {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  content: "";
+  background: linear-gradient(
+    to bottom,
+    #fbfdff 0%,
+    rgba(251, 253, 255, 0.75) 12%,
+    transparent 38%
+  );
+  pointer-events: none;
+}
+
+.flow-home-map-art {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.flow-home-map-search,
+.flow-home-map-filters,
+.flow-home-map-label,
+.flow-home-map-pin,
+.flow-home-store {
+  position: absolute;
+  z-index: 2;
+}
+
+.flow-home-map-search {
+  top: 23%;
+  left: 6%;
+  width: min(340px, 44%);
+  min-height: 49px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  border-radius: 50px;
+  background: #fff;
+  box-shadow: 0 9px 30px #263a562b;
+  color: #8998aa;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.flow-home-map-search > span {
+  font-size: 27px;
+  color: #667e9b;
+}
+
+.flow-home-map-filters {
+  top: calc(23% + 58px);
+  left: 6%;
+  display: flex;
+  gap: 7px;
+}
+
+.flow-home-map-filters span {
+  padding: 8px 12px;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 4px 12px #2438541f;
+  color: #66778e;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.flow-home-map-filters .selected {
+  color: #196ce5;
+  font-weight: 700;
+}
+
+.flow-home-map-label {
+  color: #7d8b9d;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.flow-home-map-label.label-a { top: 14%; left: 76%; }
+.flow-home-map-label.label-b { top: 63%; left: 28%; }
+.flow-home-map-label.label-c { bottom: 7%; left: 6%; }
+.flow-home-map-label.label-d { bottom: 25%; left: 73%; }
+
+.flow-home-map-pin {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.flow-home-map-pin.pin-a { top: 57%; left: 48%; }
+.flow-home-map-pin.pin-b { top: 75%; left: 68%; }
+.flow-home-map-pin.pin-c { top: 67%; left: 17%; }
+
+.flow-home-pin-dot {
+  display: block;
+  width: 27px;
+  height: 27px;
+  flex: none;
+  border: 6px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 5px 15px #4458785e;
+}
+
+.flow-home-pin-dot.blue { background: #2074f3; }
+.flow-home-pin-dot.red { background: #ef7078; }
+.flow-home-pin-dot.gray { background: #7e92aa; }
+
+.flow-home-pin-card {
+  padding: 9px 11px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 7px 18px #33496129;
+  color: #21314a;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.flow-home-pin-card b {
+  display: block;
+  margin-top: 3px;
+  color: #718098;
+}
+
+.flow-home-pin-card .blue-text { color: #1a72ea; }
+.flow-home-pin-card .red-text { color: #e35566; }
+
+.flow-home-store {
+  top: 8%;
+  right: 6%;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: min(380px, 45%);
+  padding: 13px;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 16px 38px #35486130;
+}
+
+.flow-home-store-image {
+  display: flex;
+  flex: none;
+  align-items: end;
+  justify-content: center;
+  width: 100px;
+  height: 110px;
+  padding-bottom: 18px;
+  border-radius: 11px;
+  background:
+    linear-gradient(0deg, #3f3024 0 28%, transparent 28%),
+    linear-gradient(145deg, #35583c, #a47139 60%, #3c3c2c);
+  color: #ffe6ae;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+}
+
+.flow-home-store-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  color: #1b2c46;
+}
+
+.flow-home-store-details strong {
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+.flow-home-store-details small {
+  color: #8794a6;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.flow-home-store-details > span {
+  color: #259b73;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.flow-home-store-details i {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 4px;
+  border-radius: 50%;
+  background: #2abb81;
+}
+
+.flow-home-store-details b {
+  color: #1972e9;
+}
+
+.flow-home-store-arrow {
+  align-self: flex-start;
+  margin-left: auto;
+  color: #8c9bb0;
+  font-size: 24px;
+}
+
+/* 오른쪽 통계 카드 */
+.flow-home-analytics {
+  position: relative;
+  width: 100%;
+  margin-top: 32px;
+  padding: 23px;
+  border: 1px solid #36598d;
+  border-radius: 22px;
+  background: rgba(24, 48, 85, 0.86);
+  box-shadow: 0 22px 60px #0713263b;
+}
+
+.flow-home-analytics-heading,
+.flow-home-chart-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.flow-home-analytics-heading strong,
+.flow-home-chart-heading strong {
+  color: #f5f9ff;
+  font-size: 17px;
+}
+
+.flow-home-live,
+.flow-home-chart-heading > span {
+  color: #c2d0e2;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.flow-home-live i {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: #37dca8;
+}
+
+.flow-home-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  margin: 24px 0 27px;
+}
+
+.flow-home-metric {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.flow-home-metric + .flow-home-metric {
+  padding-left: 22px;
+  border-left: 1px solid #4874b0;
+}
+
+.flow-home-metric-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #234774;
+  color: #84bbff;
+  font-size: 24px;
+}
+
+.flow-home-metric-label {
+  display: block;
+  color: #c2d0e0;
+  font-size: 12px;
+}
+
+.flow-home-metric strong {
+  display: inline-block;
+  margin-top: 5px;
+  color: #fff;
+  font-size: 30px;
+  line-height: 1;
+}
+
+.flow-home-metric strong small {
+  margin-left: 2px;
+  font-size: 13px;
+}
+
+.flow-home-trend {
+  display: inline-block;
+  margin-left: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.flow-home-trend.green { color: #47d4ab; }
+.flow-home-trend.blue { color: #5ea9ff; }
+
+.flow-home-chart-card {
+  overflow: hidden;
+  padding: 18px 16px 8px;
+  border: 1px solid #2d4c78;
+  border-radius: 14px;
+  background: #0c203d77;
+}
+
+.flow-home-chart-svg {
+  display: block;
+  width: 100%;
+  height: 205px;
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+/* 작은 화면 */
+@media (max-width: 1050px) {
+  .flow-home {
+    grid-template-columns: 1fr;
+  }
+
+  .flow-home-left,
+  .flow-home-right {
+    min-height: 740px;
+  }
+
+  .flow-home-right-inner {
+    max-width: 760px;
+    padding-top: 70px;
+  }
+
+  .flow-home-map {
+    height: 440px;
+  }
+}
+
+@media (max-width: 600px) {
+  .flow-home-left {
+    min-height: 690px;
+  }
+
+  .flow-home-right {
+    min-height: 690px;
+  }
+
+  .flow-home-brand {
+    height: 66px;
+    font-size: 24px;
+    
+  }
+
+  .flow-home-left-copy {
+    padding-top: 25px;
+  }
+
+  .flow-home-right-inner {
+    padding: 50px 20px 30px;
+  }
+
+  .flow-home-left-copy p,
+  .flow-home-manager-description {
+    font-size: 16px;
+  }
+
+  .flow-home-manager-description br {
+    display: none;
+  }
+
+  .flow-home-button {
+    min-width: 205px;
+    height: 54px;
+    font-size: 16px;
+  }
+
+  .flow-home-map {
+    height: 390px;
+  }
+
+  .flow-home-map-search,
+  .flow-home-map-filters {
+    display: none;
+  }
+
+  .flow-home-store {
+    top: 9%;
+    right: 4%;
+    width: 235px;
+  }
+
+  .flow-home-store-image {
+    width: 67px;
+    height: 78px;
+    font-size: 7px;
+  }
+
+  .flow-home-store-details {
+    gap: 5px;
+  }
+
+  .flow-home-store-details strong {
+    font-size: 13px;
+  }
+
+  .flow-home-store-details small,
+  .flow-home-store-details > span {
+    font-size: 9px;
+  }
+
+  .flow-home-store-arrow {
+    display: none;
+  }
+
+  .flow-home-analytics {
+    padding: 15px;
+  }
+
+  .flow-home-live,
+  .flow-home-chart-heading > span,
+  .flow-home-metric-icon,
+  .flow-home-trend {
+    display: none;
+  }
+
+  .flow-home-metric + .flow-home-metric {
+    padding-left: 12px;
+  }
+
+  .flow-home-metric strong {
+    font-size: 25px;
+  }
+
+  .flow-home-chart-svg {
+    height: 175px;
+  }
+}
+/* 좌우 영역을 정확히 반반으로 */
+.flow-home {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+/* 왼쪽 설명 영역을 오른쪽 두 줄 설명과 같은 높이로 */
+.flow-home-left-copy p {
+  min-height: 72px;
+}
+
+/* 모바일에서는 세로 배치와 원래 문장 높이 사용 */
+@media (max-width: 1050px) {
+  .flow-home {
+    grid-template-columns: 1fr;
+  }
+
+  .flow-home-left-copy p {
+    min-height: 0;
+  }
+}
+@media (min-width: 1051px) {
+  .flow-home-map {
+    height: clamp(480px, 67vh, 690px);
+  }
+}
+.flow-home-brand {
+  padding-left: 10px;
+}
+

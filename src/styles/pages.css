@@ -1,0 +1,39 @@
+/* =========================
+   데이터 분석 / 설정
+========================= */
+
+.simple-page {
+  padding: 30px;
+}
+
+.simple-page h1 {
+  margin: 0;
+
+  font-size: 32px;
+}
+
+.simple-page > p {
+  color: #6b7a90;
+
+  margin-top: 10px;
+
+  margin-bottom: 25px;
+}
+
+.simple-page-box {
+  background: white;
+
+  border-radius: 18px;
+
+  padding: 25px;
+
+  margin-bottom: 20px;
+}
+
+.simple-page-box h2 {
+  margin-top: 0;
+}
+
+.simple-page-box p {
+  color: #596a80;
+}

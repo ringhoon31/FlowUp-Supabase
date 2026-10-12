@@ -1,0 +1,17 @@
+/* Flowup 공통 스타일
+   페이지별 스타일은 styles 폴더로 분리되어 있습니다.
+*/
+
+@import './styles/common.css';
+@import './styles/header.css';
+@import './styles/layout.css';
+@import './styles/dashboard.css';
+@import './styles/stats.css';
+@import './styles/pages.css';
+@import './styles/analysis.css';
+@import './styles/settings.css';
+@import './styles/map.css';
+@import './styles/login.css';
+@import './styles/store.css';
+@import './styles/responsive.css';
+@import './styles/home.css';

@@ -1,0 +1,661 @@
+/* =========================================
+   페이지 너비 / 배경
+========================================= */
+
+#root:has(.flow-stats-page) {
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.app:has(.flow-stats-page) {
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.app:has(.flow-stats-page) > main.main {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+body:has(.flow-stats-page) {
+  margin: 0;
+  background: #142138;
+}
+
+.flow-stats-page,
+.flow-stats-page * {
+  box-sizing: border-box;
+}
+
+.flow-stats-page {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  min-height: calc(100vh - 74px);
+  margin: 0;
+  padding: 34px clamp(20px, 4vw, 72px) 58px;
+  overflow: hidden;
+  color: #f4f8ff;
+  background:
+    radial-gradient(
+      ellipse 75% 55% at 85% 6%,
+      rgba(55, 100, 166, 0.28),
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 80% 75% at 9% 100%,
+      rgba(35, 76, 140, 0.32),
+      transparent 72%
+    ),
+    linear-gradient(120deg, #142138, #1d3253);
+}
+
+.flow-stats-page::before,
+.flow-stats-page::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 145%;
+  height: 540px;
+  border: 1px solid rgba(105, 159, 240, 0.2);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.flow-stats-page::before {
+  top: -410px;
+  left: 16%;
+  transform: rotate(-12deg);
+}
+
+.flow-stats-page::after {
+  right: 12%;
+  bottom: -410px;
+  transform: rotate(-10deg);
+}
+
+.flow-stats-inner {
+  width: min(100%, 1460px);
+  margin: 0 auto;
+}
+
+.flow-stats-icon {
+  display: block;
+  flex: none;
+}
+
+/* =========================================
+   제목 / 기간 선택
+========================================= */
+
+.flow-stats-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+
+.flow-stats-kicker {
+  display: block;
+  margin-bottom: 7px;
+  color: #86b8ff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.17em;
+}
+
+.flow-stats-header h1 {
+  margin: 0;
+  color: #fff;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1.25;
+}
+
+.flow-stats-header p {
+  margin: 7px 0 0;
+  color: #adbfda;
+  font-size: 13px;
+}
+
+.flow-stats-periods {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px;
+  border: 1px solid rgba(137, 179, 237, 0.29);
+  border-radius: 11px;
+  background: rgba(24, 43, 72, 0.88);
+}
+
+.flow-stats-periods button {
+  min-height: 36px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #b2c4de;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.flow-stats-periods button:hover {
+  color: #fff;
+}
+
+.flow-stats-periods button.active {
+  background: #367ce3;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(30, 99, 215, 0.23);
+}
+
+.flow-stats-periods button:focus-visible {
+  outline: 2px solid #a8d0ff;
+  outline-offset: 2px;
+}
+
+/* =========================================
+   상단 통계 카드 3개
+========================================= */
+
+.flow-stats-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
+  margin-bottom: 16px;
+}
+
+.flow-stats-summary-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-width: 0;
+  min-height: 116px;
+  padding: 20px 23px;
+  border: 1px solid rgba(132, 175, 239, 0.43);
+  border-radius: 15px;
+  background: rgba(29, 50, 83, 0.87);
+}
+
+.flow-stats-summary-icon {
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  flex: 0 0 50px;
+  border-radius: 14px;
+  background: rgba(83, 152, 246, 0.16);
+  color: #91c2ff;
+}
+
+.flow-stats-summary-card:nth-child(2)
+  .flow-stats-summary-icon {
+  background: rgba(83, 216, 181, 0.13);
+  color: #88e1cc;
+}
+
+.flow-stats-summary-card:nth-child(3)
+  .flow-stats-summary-icon {
+  background: rgba(255, 195, 116, 0.13);
+  color: #ffd08e;
+}
+
+.flow-stats-summary-card > div:last-child {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.flow-stats-summary-card span {
+  color: #b3c4db;
+  font-size: 12px;
+}
+
+.flow-stats-summary-card strong {
+  margin: 6px 0 4px;
+  color: #fff;
+  font-size: clamp(25px, 2.2vw, 34px);
+  font-weight: 800;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.flow-stats-summary-card small {
+  color: #96b6df;
+  font-size: 11px;
+}
+
+/* =========================================
+   분석 패널 공통
+========================================= */
+
+.flow-stats-main-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2.25fr) minmax(270px, 1fr);
+  gap: 15px;
+  margin-bottom: 16px;
+}
+
+.flow-stats-panel {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(132, 175, 239, 0.43);
+  border-radius: 16px;
+  background: rgba(28, 49, 81, 0.87);
+  box-shadow: 0 10px 30px rgba(4, 14, 34, 0.1);
+}
+
+.flow-stats-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 78px;
+  padding: 16px 22px;
+  border-bottom: 1px solid rgba(137, 175, 230, 0.23);
+}
+
+.flow-stats-panel-heading > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.flow-stats-panel-icon {
+  display: grid;
+  place-items: center;
+  width: 35px;
+  height: 35px;
+  flex: 0 0 35px;
+  border-radius: 10px;
+  background: rgba(87, 150, 238, 0.15);
+  color: #8cbdff;
+}
+
+.flow-stats-panel-heading h2 {
+  margin: 0;
+  color: #f6faff;
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.flow-stats-panel-heading p {
+  margin: 4px 0 0;
+  color: #98aecb;
+  font-size: 11px;
+}
+
+.flow-stats-heading-tag {
+  color: #93b9ea;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.flow-stats-chart-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 9px 23px;
+  border-top: 1px solid rgba(137, 175, 230, 0.15);
+  color: #9eb4d1;
+  font-size: 11px;
+}
+
+.flow-stats-dot {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+  background: #71aeff;
+}
+
+/* =========================================
+   시간대별 상세 그래프
+========================================= */
+
+.flow-stats-chart-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.flow-stats-hourly-chart,
+.flow-stats-weekly-chart {
+  position: relative;
+  min-width: 680px;
+  height: 335px;
+  padding: 27px 24px 32px 63px;
+}
+
+.flow-stats-hourly-grid,
+.flow-stats-weekly-grid {
+  position: absolute;
+  top: 47px;
+  right: 24px;
+  bottom: 53px;
+  left: 63px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.flow-stats-hourly-grid span,
+.flow-stats-weekly-grid span {
+  width: 100%;
+  border-top: 1px dashed rgba(156, 188, 232, 0.2);
+}
+
+.flow-stats-y-axis {
+  position: absolute;
+  top: 41px;
+  bottom: 47px;
+  left: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 36px;
+  color: #92a9c8;
+  font-size: 11px;
+}
+
+.flow-stats-hourly-bars {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(
+    12,
+    minmax(0, 1fr)
+  );
+  align-items: end;
+  gap: clamp(7px, 1.2vw, 18px);
+  height: 100%;
+}
+
+.flow-stats-hourly-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+  height: 100%;
+}
+
+.flow-stats-hourly-item > strong,
+.flow-stats-weekly-item > strong {
+  margin-bottom: 7px;
+  color: #cbdffc;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.flow-stats-hourly-track {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: 228px;
+}
+
+.flow-stats-hourly-fill {
+  width: min(100%, 40px);
+  min-height: 3px;
+  border-radius: 6px 6px 0 0;
+  background: linear-gradient(
+    180deg,
+    #76b0ff,
+    #3b76cd
+  );
+}
+
+.flow-stats-hourly-fill.is-peak {
+  background: linear-gradient(
+    180deg,
+    #b6ddff,
+    #70afff
+  );
+  box-shadow: 0 0 18px rgba(95, 171, 255, 0.27);
+}
+
+.flow-stats-hourly-item > small,
+.flow-stats-weekly-item > small {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  color: #b6c8e1;
+  font-size: 10px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* =========================================
+   가장 붐비는 / 한산한 시간
+========================================= */
+
+.flow-stats-analysis-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.flow-stats-analysis-list {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 14px;
+  flex: 1;
+  padding: 17px;
+}
+
+.flow-stats-analysis-box {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 19px;
+  border: 1px solid rgba(141, 180, 232, 0.22);
+  border-radius: 13px;
+  background: rgba(59, 91, 139, 0.17);
+}
+
+.flow-stats-analysis-icon {
+  display: grid;
+  place-items: center;
+  width: 43px;
+  height: 43px;
+  flex: 0 0 43px;
+  border-radius: 50%;
+  background: rgba(255, 205, 139, 0.11);
+  color: #ffd08e;
+}
+
+.flow-stats-analysis-box.quiet
+  .flow-stats-analysis-icon {
+  background: rgba(104, 213, 188, 0.12);
+  color: #89ddc9;
+}
+
+.flow-stats-analysis-box > div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.flow-stats-analysis-box > div > span {
+  color: #b5c6de;
+  font-size: 12px;
+}
+
+.flow-stats-analysis-box strong {
+  margin: 7px 0 5px;
+  color: #ffd08e;
+  font-size: clamp(23px, 2.2vw, 32px);
+  line-height: 1.15;
+}
+
+.flow-stats-analysis-box.quiet strong {
+  color: #91e4d2;
+}
+
+.flow-stats-analysis-box small {
+  color: #aebfda;
+  font-size: 12px;
+}
+
+/* =========================================
+   요일별 상세 그래프
+========================================= */
+
+.flow-stats-weekly-chart {
+  min-width: 620px;
+  height: 326px;
+}
+
+.flow-stats-weekly-bars {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(
+    7,
+    minmax(0, 1fr)
+  );
+  align-items: end;
+  gap: clamp(15px, 3vw, 50px);
+  height: 100%;
+  padding: 0 18px;
+}
+
+.flow-stats-weekly-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+  height: 100%;
+}
+
+.flow-stats-weekly-track {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: 220px;
+}
+
+.flow-stats-weekly-fill {
+  width: min(100%, 66px);
+  min-height: 3px;
+  border-radius: 6px 6px 0 0;
+  background: linear-gradient(
+    180deg,
+    #8cbdff,
+    #457dd4
+  );
+}
+
+.flow-stats-weekly-fill.is-peak {
+  background: linear-gradient(
+    180deg,
+    #bbdfff,
+    #70adff
+  );
+  box-shadow: 0 0 18px rgba(95, 171, 255, 0.26);
+}
+
+/* =========================================
+   반응형
+========================================= */
+
+@media (max-width: 1050px) {
+  .flow-stats-main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .flow-stats-analysis-list {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .flow-stats-page {
+    padding: 25px 14px 38px;
+  }
+
+  .flow-stats-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .flow-stats-header h1 {
+    font-size: 27px;
+  }
+
+  .flow-stats-periods {
+    width: 100%;
+  }
+
+  .flow-stats-periods button {
+    flex: 1;
+    padding: 0 8px;
+  }
+
+  .flow-stats-summary {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .flow-stats-summary-card {
+    min-height: 94px;
+    padding: 14px 18px;
+  }
+
+  .flow-stats-panel-heading {
+    min-height: 72px;
+    padding: 13px 16px;
+  }
+
+  .flow-stats-heading-tag {
+    display: none;
+  }
+
+  .flow-stats-analysis-list {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 13px;
+  }
+
+  .flow-stats-analysis-box {
+    min-height: 108px;
+  }
+
+  .flow-stats-chart-footer {
+    padding: 9px 16px;
+  }
+}
+.app:has(.flow-stats-page) .flow-stats-page {
+  margin-top: 0;
+  padding-top: 90px;
+}
