@@ -23,4 +23,4 @@ ENV ASPNETCORE_URLS=http://0.0.0.0:10000
 EXPOSE 10000
 
 # Wallet 복원 후 C# API 실행
-ENTRYPOINT ["sh", "/app/start.sh"]
+ENTRYPOINT ["sh", "-c", "echo 'FlowUp Docker entrypoint started'; exec sh /app/start.sh"]
