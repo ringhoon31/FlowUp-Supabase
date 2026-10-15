@@ -130,6 +130,131 @@ app.get('/api/seoul-citydata', async (req, res) => {
 })
 
 
+
+
+// Supabase REST API (server-only key; never expose to Vite/client)
+const SUPABASE_URL = (process.env.SUPABASE_URL || '').replace(/\/$/, '')
+const SUPABASE_KEY = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+
+async function supabase(table, query = '', options = {}) {
+  if (!SUPABASE_URL || !SUPABASE_KEY) throw new Error('Supabase server credentials missing')
+  const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}${query}`, {
+    ...options,
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: `Bearer ${SUPABASE_KEY}`,
+      ...(options.body ? { 'Content-Type': 'application/json', Prefer: 'return=representation' } : {}),
+      ...(options.headers || {})
+    }
+  })
+  const body = await response.text()
+  if (!response.ok) throw new Error(`Supabase ${response.status}: ${body.slice(0, 250)}`)
+  return body ? JSON.parse(body) : []
+}
+
+function reportError(res, error) {
+  console.error('[Supabase API]', error.message)
+  res.status(502).json({ message: 'Supabase 조회 또는 저장에 실패했습니다. 서버 로그와 테이블 구조를 확인해주세요.' })
+}
+
+const visitorFields = 'log_id,store_id,device_id,event_type,in_count,out_count,current_people,log_time'
+const asVisitor = (r) => ({
+  logId: r.log_id, storeId: r.store_id, deviceId: r.device_id,
+  eventType: r.event_type, inCount: r.in_count ?? 0,
+  outCount: r.out_count ?? 0, peopleNow: r.current_people ?? 0,
+  createdAt: r.log_time
+})
+
+app.get('/api/people', async (req, res) => {
+  try {
+    const rows = await supabase('flowup_visitor_logs', `?select=${visitorFields}&order=log_time.desc,log_id.desc&limit=1`)
+    res.json(rows.length ? { ...asVisitor(rows[0]), lastEvent: rows[0].event_type } : {
+      inCount: 0, outCount: 0, peopleNow: 0, lastEvent: 'NONE', createdAt: null
+    })
+  } catch (e) { reportError(res, e) }
+})
+
+app.get('/api/people/history', async (req, res) => {
+  try {
+    // PostgREST commonly limits each response to 1,000 rows; paginate for correct statistics.
+    const all = []
+    for (let start = 0; start < 100000; start += 1000) {
+      const rows = await supabase('flowup_visitor_logs', `?select=${visitorFields}&order=log_time.asc,log_id.asc&offset=${start}&limit=1000`)
+      all.push(...rows)
+      if (rows.length < 1000) break
+    }
+    res.json(all.map(asVisitor))
+  } catch (e) { reportError(res, e) }
+})
+
+app.get('/api/people/hourly', async (req, res) => {
+  try {
+    const all = []
+    for (let start = 0; start < 100000; start += 1000) {
+      const rows = await supabase('flowup_visitor_logs', `?select=${visitorFields}&order=log_time.asc,log_id.asc&offset=${start}&limit=1000`)
+      all.push(...rows)
+      if (rows.length < 1000) break
+    }
+    const previous = new Map()
+    const buckets = new Map()
+    for (const row of all) {
+      const date = new Date(row.log_time)
+      if (Number.isNaN(date.getTime())) continue
+      const key = `${row.store_id ?? ''}:${row.device_id ?? ''}`
+      const old = previous.get(key)
+      const currentIn = Number(row.in_count) || 0
+      const currentOut = Number(row.out_count) || 0
+      // Counters may reset on reboot; use positive deltas.
+      const deltaIn = old ? (currentIn >= old.i ? currentIn - old.i : currentIn) : currentIn
+      const deltaOut = old ? (currentOut >= old.o ? currentOut - old.o : currentOut) : currentOut
+      previous.set(key, { i: currentIn, o: currentOut })
+      const hour = new Date(Math.floor(date.getTime() / 3600000) * 3600000).toISOString()
+      const value = buckets.get(hour) || { hour, inCount: 0, outCount: 0 }
+      value.inCount += Math.max(0, deltaIn)
+      value.outCount += Math.max(0, deltaOut)
+      buckets.set(hour, value)
+    }
+    res.json([...buckets.values()].sort((a, b) => a.hour.localeCompare(b.hour)))
+  } catch (e) { reportError(res, e) }
+})
+
+// Expected columns in public.flowup_stores:
+// store_id (identity PK), store_name, address, latitude, longitude, device_id, user_id.
+const storeFields = 'store_id,store_name,address,latitude,longitude,device_id,user_id'
+const asStore = (r) => ({ id: String(r.store_id), name: r.store_name, address: r.address,
+  latitude: r.latitude, longitude: r.longitude, deviceId: r.device_id || '', userId: r.user_id })
+const storePayload = (r) => ({ store_name: String(r.storeName || '').trim(), address: String(r.address || '').trim(),
+  latitude: r.latitude, longitude: r.longitude, device_id: r.deviceId || null, user_id: r.userId || null })
+
+app.get('/api/stores', async (req, res) => {
+  try { res.json((await supabase('flowup_stores', `?select=${storeFields}&order=store_id.asc`)).map(asStore)) }
+  catch (e) { reportError(res, e) }
+})
+app.post('/api/stores', async (req, res) => {
+  try {
+    const payload = storePayload(req.body)
+    if (!payload.store_name || !payload.address) return res.status(400).json({ message: '매장명과 주소가 필요합니다.' })
+    const rows = await supabase('flowup_stores', `?select=${storeFields}`, { method: 'POST', body: JSON.stringify(payload) })
+    res.json({ store: asStore(rows[0]) })
+  } catch (e) { reportError(res, e) }
+})
+app.put('/api/stores/:id', async (req, res) => {
+  try {
+    const rows = await supabase('flowup_stores', `?store_id=eq.${encodeURIComponent(req.params.id)}&select=${storeFields}`, {
+      method: 'PATCH', body: JSON.stringify(storePayload(req.body))
+    })
+    if (!rows.length) return res.status(404).json({ message: '매장을 찾을 수 없습니다.' })
+    res.json({ store: asStore(rows[0]) })
+  } catch (e) { reportError(res, e) }
+})
+app.delete('/api/stores/:id', async (req, res) => {
+  try {
+    // Never silently delete visitor history. Supabase FK policy decides if deletion is allowed.
+    await supabase('flowup_stores', `?store_id=eq.${encodeURIComponent(req.params.id)}`, { method: 'DELETE' })
+    res.json({ message: '매장 삭제 요청이 완료되었습니다.', storeId: req.params.id })
+  } catch (e) { reportError(res, e) }
+})
+
 // ==========================================
 // 서버 실행
 // ==========================================

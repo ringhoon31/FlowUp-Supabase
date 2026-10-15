@@ -204,8 +204,8 @@ function StoreRegister({
       }
 
       const url = editingId
-        ? `${import.meta.env.VITE_VISITOR_API_URL}/api/stores/${editingId}`
-        : `${import.meta.env.VITE_VISITOR_API_URL}/api/stores`
+        ? `${(import.meta.env.VITE_VISITOR_API_URL || 'http://localhost:3001')}/api/stores/${editingId}`
+        : `${(import.meta.env.VITE_VISITOR_API_URL || 'http://localhost:3001')}/api/stores`
 
       const response = await fetch(url, {
         method: editingId ? 'PUT' : 'POST',

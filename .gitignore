@@ -50,3 +50,12 @@ obj/
 
 # Local deployment settings
 .vercel
+
+# Oracle Cloud DB 보안 파일
+**/Wallet_FLOWUPDB/
+**/Wallet_FLOWUPDB.zip
+**/wallet/
+**/Wallet_*/
+
+# 로컬 환경 설정
+**/appsettings.Production.json

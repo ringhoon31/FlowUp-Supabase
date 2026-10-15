@@ -6,7 +6,7 @@ export function normalizeVisitorHistory(result) {
 
   const rows = result
     .map((item, index) => {
-      const createdAt = item?.createdAt ?? item?.created_at ?? item?.time
+      const createdAt = item?.createdAt ?? item?.created_at ?? item?.log_time ?? item?.time
       const date = createdAt ? new Date(createdAt) : null
 
       return {
@@ -17,7 +17,7 @@ export function normalizeVisitorHistory(result) {
         eventType: String(item?.eventType ?? item?.event_type ?? '').toUpperCase(),
         inCount: Number(item?.inCount ?? item?.in_count ?? 0) || 0,
         outCount: Number(item?.outCount ?? item?.out_count ?? 0) || 0,
-        peopleNow: Number(item?.peopleNow ?? item?.people_now ?? 0) || 0,
+        peopleNow: Number(item?.peopleNow ?? item?.people_now ?? item?.current_people ?? 0) || 0,
         createdAt,
         date: date && !Number.isNaN(date.getTime()) ? date : null
       }

@@ -9,7 +9,7 @@ function VisitorDbPanel({ selectedStore }) {
 
   const fetchVisitorData = useCallback(async () => {
     try {
-      const baseUrl = import.meta.env.VITE_VISITOR_API_URL
+      const baseUrl = (import.meta.env.VITE_VISITOR_API_URL || 'http://localhost:3001')
 
       if (!baseUrl) {
         throw new Error('VITE_VISITOR_API_URL 환경변수가 설정되지 않았습니다.')

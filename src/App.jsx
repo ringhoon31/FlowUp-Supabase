@@ -121,8 +121,7 @@ const changeTheme = (nextTheme) => {
       loginUser.userName
     )
 
-    // 매장 정보는 현재 프로젝트의 기존 localStorage 구조를 사용합니다.
-    // /api/stores 엔드포인트는 현재 FlowUp API에 없으므로 호출하지 않습니다.
+    // 기존 localStorage 매장은 유지하며 Supabase 매장 API는 별도로 제공합니다.
     const localStores = loadStores()
 
     setStores(localStores)

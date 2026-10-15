@@ -397,7 +397,7 @@ useEffect(() => {
   const fetchVisitorData = async () => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_VISITOR_API_URL}/api/people`,
+        `${(import.meta.env.VITE_VISITOR_API_URL || 'http://localhost:3001')}/api/people`,
         { signal: AbortSignal.timeout(5000) }
       )
 
@@ -434,7 +434,7 @@ useEffect(() => {
     const fetchHistoryData = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_VISITOR_API_URL}/api/people/history`,
+          `${(import.meta.env.VITE_VISITOR_API_URL || 'http://localhost:3001')}/api/people/history`,
           { signal: AbortSignal.timeout(5000) }
         )
 
@@ -468,7 +468,7 @@ useEffect(() => {
     const fetchHourlyData = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_VISITOR_API_URL}/api/people/hourly`,
+          `${(import.meta.env.VITE_VISITOR_API_URL || 'http://localhost:3001')}/api/people/hourly`,
           { signal: AbortSignal.timeout(5000) }
         )
 
