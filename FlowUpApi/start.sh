@@ -3,35 +3,41 @@ set -e
 
 echo "=== Oracle Wallet Setup ==="
 
-mkdir -p /tmp/flowup-wallet
+SECRET_FILE="/etc/secrets/wallet-base64.txt"
+WALLET_ROOT="/tmp/flowup-wallet"
 
-# Render Secret File 확인
-if [ ! -f /etc/secrets/wallet-base64.txt ]; then
-    echo "ERROR: wallet-base64.txt not found"
+if [ ! -f "$SECRET_FILE" ]; then
+    echo "ERROR: wallet-base64.txt not found at $SECRET_FILE"
     exit 1
 fi
 
-base64 -d /etc/secrets/wallet-base64.txt > /tmp/flowup-wallet.zip
-unzip -o -q /tmp/flowup-wallet.zip -d /tmp/flowup-wallet
+mkdir -p "$WALLET_ROOT"
+base64 -d "$SECRET_FILE" > /tmp/flowup-wallet.zip
+unzip -o -q /tmp/flowup-wallet.zip -d "$WALLET_ROOT"
 
-# tnsnames.ora 검색
-TNS_FILE=$(find /tmp/flowup-wallet -type f -name "tnsnames.ora" -print -quit)
-
+TNS_FILE=$(find "$WALLET_ROOT" -type f -name 'tnsnames.ora' -print -quit)
 if [ -z "$TNS_FILE" ]; then
-    echo "ERROR: tnsnames.ora not found"
-    echo "Extracted Wallet filenames:"
-    find /tmp/flowup-wallet -type f -printf '%f\n'
+    echo "ERROR: tnsnames.ora not found in extracted Wallet"
     exit 1
 fi
 
-# Oracle Wallet 경로 설정
 export ORACLE_WALLET_PATH="$(dirname "$TNS_FILE")"
 export TNS_ADMIN="$ORACLE_WALLET_PATH"
 
+if grep -qi '^[[:space:]]*flowupdb_low[[:space:]]*=' "$TNS_FILE"; then
+    echo "Oracle TNS alias flowupdb_low: FOUND"
+else
+    echo "ERROR: Oracle TNS alias flowupdb_low not found"
+    exit 1
+fi
+
+SQLNET_FILE="$ORACLE_WALLET_PATH/sqlnet.ora"
+if [ -f "$SQLNET_FILE" ]; then
+    sed -i "s|?/network/admin|$ORACLE_WALLET_PATH|g" "$SQLNET_FILE"
+fi
+
 echo "Oracle Wallet directory: $ORACLE_WALLET_PATH"
 echo "Oracle Wallet configured successfully"
-
-# Render 포트 확인
-echo "Render PORT: ${PORT:-not-set}"
+echo "Render PORT: ${PORT:-5013}"
 
 exec dotnet FlowUpApi.dll
