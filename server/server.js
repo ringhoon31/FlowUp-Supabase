@@ -259,8 +259,12 @@ app.delete('/api/stores/:id', async (req, res) => {
 // 서버 실행
 // ==========================================
 
-app.listen(PORT, () => {
-  console.log(
-    `Flowup server running on http://localhost:${PORT}`
-  )
-})
+// 로컬에서 직접 실행할 때만 서버 시작
+if (process.env.VERCEL !== '1') {
+  app.listen(PORT, () => {
+    console.log(`Flowup server running on http://localhost:${PORT}`)
+  })
+}
+
+// Vercel에서도 Express 앱을 사용할 수 있도록 내보내기
+export default app
