@@ -333,9 +333,9 @@ function Dashboard({
     try {
       setCityDataStatus('loading')
 
-      const response = await fetch(
-        'http://localhost:3001/api/seoul-citydata?area=강남역'
-      )
+     const response = await fetch(
+  '/api/seoul-citydata?area=' + encodeURIComponent('강남역')
+)
 
       if (!response.ok) {
         throw new Error(
@@ -397,7 +397,7 @@ useEffect(() => {
   const fetchVisitorData = async () => {
     try {
       const response = await fetch(
-        `${(import.meta.env.VITE_VISITOR_API_URL || 'http://localhost:3001')}/api/people`,
+        `${(import.meta.env.VITE_VISITOR_API_URL || '')}/api/people`,
         { signal: AbortSignal.timeout(5000) }
       )
 
@@ -434,7 +434,7 @@ useEffect(() => {
     const fetchHistoryData = async () => {
       try {
         const response = await fetch(
-          `${(import.meta.env.VITE_VISITOR_API_URL || 'http://localhost:3001')}/api/people/history`,
+          `${(import.meta.env.VITE_VISITOR_API_URL || '')}/api/people/history`,
           { signal: AbortSignal.timeout(5000) }
         )
 
@@ -468,7 +468,7 @@ useEffect(() => {
     const fetchHourlyData = async () => {
       try {
         const response = await fetch(
-          `${(import.meta.env.VITE_VISITOR_API_URL || 'http://localhost:3001')}/api/people/hourly`,
+          `${(import.meta.env.VITE_VISITOR_API_URL || '')}/api/people/hourly`,
           { signal: AbortSignal.timeout(5000) }
         )
 

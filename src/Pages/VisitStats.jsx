@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import '../styles/stats.css'
 import { normalizeVisitorHistory } from '../visitorData'
 
-const API_URL = (import.meta.env.VITE_VISITOR_API_URL || 'http://localhost:3001')
+const API_URL = (import.meta.env.VITE_VISITOR_API_URL || '')
 
 function StatsIcon({ name }) {
   const paths = {
