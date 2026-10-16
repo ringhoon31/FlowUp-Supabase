@@ -485,30 +485,31 @@ useEffect(() => {
           result
         )
 
-        // API 응답은 날짜+시간별 집계이므로, 대시보드에서는 같은 시각을 합쳐
-        // 날짜가 다른 13:00 항목 등이 중복으로 나타나지 않게 합니다.
+        // 대시보드는 오늘(브라우저 현지 날짜)의 입장 기록만 표시합니다.
+        // API의 hour 값은 ISO 날짜이므로 Date로 변환해 현지 날짜를 비교합니다.
+        const now = new Date()
+        const todayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
         const groupedByHour = new Map()
-        const allDaysWithData = new Set()
 
         if (Array.isArray(result)) {
           result.forEach((item) => {
             const date = new Date(item?.hour)
             if (Number.isNaN(date.getTime())) return
 
+            const dateKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+            if (dateKey !== todayKey) return
+
             const hour = date.getHours()
             const time = `${String(hour).padStart(2, '0')}:00`
             const inCount = Number(item?.inCount) || 0
             const outCount = Number(item?.outCount) || 0
-            const dateKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
-            allDaysWithData.add(dateKey)
 
             if (!groupedByHour.has(hour)) {
-              groupedByHour.set(hour, { time, totalIn: 0, totalOut: 0 })
+              groupedByHour.set(hour, { time, inCount: 0, outCount: 0 })
             }
-
             const group = groupedByHour.get(hour)
-            group.totalIn += inCount
-            group.totalOut += outCount
+            group.inCount += inCount
+            group.outCount += outCount
           })
         }
 
@@ -516,10 +517,9 @@ useEffect(() => {
           .sort((a, b) => a.time.localeCompare(b.time))
           .map((item) => ({
             time: item.time,
-            // 여러 날짜의 단순 합계가 아닌, 데이터가 있는 날짜 기준 시간당 평균입니다.
-            count: allDaysWithData.size ? Math.round(item.totalIn / allDaysWithData.size) : 0,
-            inCount: allDaysWithData.size ? Math.round(item.totalIn / allDaysWithData.size) : 0,
-            outCount: allDaysWithData.size ? Math.round(item.totalOut / allDaysWithData.size) : 0
+            count: item.inCount,
+            inCount: item.inCount,
+            outCount: item.outCount
           }))
 
         setHourlyApiData(convertedData)
