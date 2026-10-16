@@ -2,12 +2,7 @@ import { useEffect, useState } from 'react'
 
 import VisitorDbPanel from '../components/VisitorDbPanel'
 
-import {
-  dashboardData,
-  seoulRealtime as mockSeoulRealtime
-} from '../mockData'
-
-import { getSeoulRealtimePopulation } from '../seoulApi'
+import { dashboardData } from '../mockData'
 
 import '../styles/dashboard.css'
 import { normalizeVisitorHistory } from '../visitorData'
@@ -179,7 +174,7 @@ function Dashboard({
     useState('')
 
   const [seoulRealtime, setSeoulRealtime] =
-    useState(mockSeoulRealtime)
+    useState(null)
 
   const [seoulApiStatus, setSeoulApiStatus] =
     useState('loading')
@@ -277,61 +272,11 @@ function Dashboard({
     closeDeleteDialog()
   }
 
-  const fetchSeoulRealtime = () => {
-    setSeoulApiStatus('loading')
-    setSeoulApiError('')
-
-    getSeoulRealtimePopulation('강남역')
-      .then((data) => {
-        const populationData =
-          data?.CITYDATA?.LIVE_PPLTN_STTS?.[0]
-
-        if (!populationData) {
-          throw new Error(
-            '실시간 인구 데이터를 찾을 수 없습니다.'
-          )
-        }
-
-        setSeoulRealtime({
-          areaName: populationData.AREA_NM,
-
-          populationMin: Number(
-            String(
-              populationData.AREA_PPLTN_MIN
-            ).replace(/,/g, '')
-          ),
-
-          populationMax: Number(
-            String(
-              populationData.AREA_PPLTN_MAX
-            ).replace(/,/g, '')
-          ),
-
-          congestionLevel:
-            populationData.AREA_CONGEST_LVL,
-
-          congestionMessage:
-            populationData.AREA_CONGEST_MSG,
-
-          updatedAt: populationData.PPLTN_TIME
-        })
-
-        setSeoulApiStatus('success')
-      })
-      .catch((error) => {
-        console.error('서울시 API 오류:', error)
-
-        setSeoulApiStatus('error')
-
-        setSeoulApiError(
-          '실시간 데이터를 불러오지 못했습니다.'
-        )
-      })
-  }
-
   const fetchCityData = async () => {
     try {
       setCityDataStatus('loading')
+      setSeoulApiStatus('loading')
+      setSeoulApiError('')
 
      const response = await fetch(
   '/api/seoul-citydata?area=' + encodeURIComponent('강남역')
@@ -360,6 +305,23 @@ function Dashboard({
 
       setCityData(data)
       setCityDataStatus('success')
+
+      const populationData = data?.LIVE_PPLTN_STTS?.[0]
+      if (!populationData) {
+        setSeoulRealtime(null)
+        setSeoulApiStatus('error')
+        setSeoulApiError('강남역 실시간 인구 데이터가 없습니다.')
+      } else {
+        setSeoulRealtime({
+          areaName: populationData.AREA_NM || '강남역',
+          populationMin: Number(String(populationData.AREA_PPLTN_MIN || 0).replace(/,/g, '')),
+          populationMax: Number(String(populationData.AREA_PPLTN_MAX || 0).replace(/,/g, '')),
+          congestionLevel: populationData.AREA_CONGEST_LVL || '정보 없음',
+          congestionMessage: populationData.AREA_CONGEST_MSG || '',
+          updatedAt: populationData.PPLTN_TIME || '정보 없음'
+        })
+        setSeoulApiStatus('success')
+      }
     } catch (error) {
       console.error(
         '서울시 도시데이터 조회 실패:',
@@ -367,16 +329,17 @@ function Dashboard({
       )
 
       setCityDataStatus('error')
+      setSeoulRealtime(null)
+      setSeoulApiStatus('error')
+      setSeoulApiError('실시간 데이터를 불러오지 못했습니다.')
     }
   }
 
   /* 기존 방식: 처음 실행하고 5분마다 다시 조회 */
   useEffect(() => {
-    fetchSeoulRealtime()
     fetchCityData()
 
     const timer = setInterval(() => {
-      fetchSeoulRealtime()
       fetchCityData()
     }, 5 * 60 * 1000)
 
@@ -1170,6 +1133,7 @@ useEffect(() => {
               </p>
             )}
 
+{seoulRealtime && (
             <div className="flow-dashboard-nearby-grid">
               <div>
                 <span className="flow-dashboard-nearby-icon">
@@ -1234,6 +1198,7 @@ useEffect(() => {
                 </strong>
               </div>
             </div>
+            )}
           </div>
         </details>
 
