@@ -488,10 +488,8 @@ function Map({ onBack }) {
 
     try {
       const response = await fetch(
-        `http://localhost:3001/api/local-search?query=${encodeURIComponent(
-          keyword
-        )}`
-      )
+  `/api/local-search?query=${encodeURIComponent(keyword)}`
+)
 
       if (!response.ok) {
         throw new Error(
