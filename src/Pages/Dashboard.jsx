@@ -187,11 +187,9 @@ function Dashboard({
   const [currentTime, setCurrentTime] =
     useState(new Date())
 
-  const [visitorApiData, setVisitorApiData] = useState(null)
   const [historyApiData, setHistoryApiData] = useState([])
   const [visitorApiStatus, setVisitorApiStatus] = useState('connecting')
 
-  const [hourlyApiData, setHourlyApiData] = useState([])
 
   const activeStoreId =
     selectedStore?.id ?? ''
@@ -338,173 +336,94 @@ function Dashboard({
     return () => clearInterval(timer)
   }, [])
 
-  /* 실시간 방문자 API */
-useEffect(() => {
-  const fetchVisitorData = async () => {
-    try {
-      const response = await fetch(
-        `${(import.meta.env.VITE_VISITOR_API_URL || '')}/api/people`,
-        { signal: AbortSignal.timeout(5000) }
-      )
-
-      if (!response.ok) {
-        throw new Error(`방문자 API 오류: ${response.status}`)
-      }
-
-      const result = await response.json()
-
-      console.log('Dashboard 방문자 데이터:', result)
-
-      setVisitorApiData(result)
-      setVisitorApiStatus('connected')
-    } catch (error) {
-      setVisitorApiStatus('disconnected')
-      console.warn('Dashboard 방문자 데이터 조회 실패:', error)
-    }
-  }
-
-  fetchVisitorData()
-
-  const timer = setInterval(() => {
-    fetchVisitorData()
-  }, 5000)
-
-  return () => clearInterval(timer)
-}, [])
-
-
-  /* 방문 이력 API: 서버가 꺼져 있어도 화면은 유지하고 빈 배열을 사용 */
+  // 상단 통계도 하단 VisitorDbPanel과 동일한 Supabase 방문 기록을 사용합니다.
+  // 선택한 매장이 바뀌면 화면에서 데이터를 즉시 다시 필터링합니다.
   useEffect(() => {
     let cancelled = false
 
     const fetchHistoryData = async () => {
       try {
         const response = await fetch(
-          `${(import.meta.env.VITE_VISITOR_API_URL || '')}/api/people/history`,
-          { signal: AbortSignal.timeout(5000) }
+          `${(import.meta.env.VITE_VISITOR_API_URL || '').replace(/\/$/, '')}/api/people/history`,
+          { signal: AbortSignal.timeout(10000), cache: 'no-store' }
         )
-
         if (!response.ok) {
           throw new Error(`방문 이력 API 오류: ${response.status}`)
         }
-
         const result = await response.json()
+        if (!Array.isArray(result)) {
+          throw new Error('방문 이력 API 응답이 배열이 아닙니다.')
+        }
         if (!cancelled) {
-          setHistoryApiData(Array.isArray(result) ? result : [])
+          setHistoryApiData(result)
+          setVisitorApiStatus('connected')
         }
       } catch (error) {
         if (!cancelled) {
+          setVisitorApiStatus('disconnected')
           setHistoryApiData([])
-          console.warn('방문 이력 API 연결 안 됨:', error)
+          console.warn('Dashboard 방문 기록 조회 실패:', error)
         }
       }
     }
 
     fetchHistoryData()
     const timer = setInterval(fetchHistoryData, 30000)
-
     return () => {
       cancelled = true
       clearInterval(timer)
     }
   }, [])
 
-  /* 실제 시간대별 방문자 API */
-  useEffect(() => {
-    const fetchHourlyData = async () => {
-      try {
-        const response = await fetch(
-          `${(import.meta.env.VITE_VISITOR_API_URL || '')}/api/people/hourly`,
-          { signal: AbortSignal.timeout(5000) }
-        )
-
-        if (!response.ok) {
-          throw new Error(
-            `시간대별 방문자 API 오류: ${response.status}`
-          )
-        }
-
-        const result = await response.json()
-
-        console.log(
-          '시간대별 방문자 데이터:',
-          result
-        )
-
-        // 대시보드는 오늘(브라우저 현지 날짜)의 입장 기록만 표시합니다.
-        // API의 hour 값은 ISO 날짜이므로 Date로 변환해 현지 날짜를 비교합니다.
-        const now = new Date()
-        const todayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
-        const groupedByHour = new Map()
-
-        if (Array.isArray(result)) {
-          result.forEach((item) => {
-            const date = new Date(item?.hour)
-            if (Number.isNaN(date.getTime())) return
-
-            const dateKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
-            if (dateKey !== todayKey) return
-
-            const hour = date.getHours()
-            const time = `${String(hour).padStart(2, '0')}:00`
-            const inCount = Number(item?.inCount) || 0
-            const outCount = Number(item?.outCount) || 0
-
-            if (!groupedByHour.has(hour)) {
-              groupedByHour.set(hour, { time, inCount: 0, outCount: 0 })
-            }
-            const group = groupedByHour.get(hour)
-            group.inCount += inCount
-            group.outCount += outCount
-          })
-        }
-
-        const convertedData = Array.from(groupedByHour.values())
-          .sort((a, b) => a.time.localeCompare(b.time))
-          .map((item) => ({
-            time: item.time,
-            count: item.inCount,
-            inCount: item.inCount,
-            outCount: item.outCount
-          }))
-
-        setHourlyApiData(convertedData)
-      } catch (error) {
-        console.error(
-          '시간대별 방문자 데이터 조회 실패:',
-          error
-        )
-
-        setHourlyApiData([])
-      }
-    }
-
-    fetchHourlyData()
-
-    const timer = setInterval(() => {
-      fetchHourlyData()
-    }, 5 * 60 * 1000)
-
-    return () => clearInterval(timer)
-  }, [])
-
-  /* 현재 혼잡도 */
+  /* 주변 현황과 동일한 서울시 실시간 인구 혼잡도 사용 (강남역 기준) */
   const cityCongestion =
-    cityData?.AREA_CONGEST_LVL || '정보 없음'
+    seoulRealtime?.congestionLevel || '정보 없음'
 
   const cityCongestionMessage =
-    cityData?.AREA_CONGEST_MSG ||
+    seoulRealtime?.congestionMessage ||
     '현재 혼잡도 정보를 확인할 수 없습니다.'
 
-  // API 조회 여부와 실제 센서 이벤트 기록을 구분합니다.
-  // /api/people은 DB의 마지막 출입 이벤트이며, 센서 연결 신호(heartbeat)가 아닙니다.
-  const sensorLastSeenAt = visitorApiData?.createdAt
-    ? new Date(visitorApiData.createdAt)
+  /* 매장별 통계: 하단 패널과 동일한 device_id 우선 규칙 */
+  const parsedHistory = normalizeVisitorHistory(historyApiData)
+  const selectedDeviceId = String(selectedStore?.deviceId || '').trim()
+  const selectedStoreId = selectedStore?.id == null ? '' : String(selectedStore.id)
+  const storeHistory = parsedHistory.filter((row) => {
+    if (!selectedStoreId && !selectedDeviceId) return false
+    // 센서 ID가 지정된 매장은 그 센서에서 발생한 기록만 사용합니다.
+    if (selectedDeviceId) return String(row.deviceId || '').trim() === selectedDeviceId
+    const rowStoreId = row.storeId ?? row.store_id
+    return rowStoreId != null && String(rowStoreId) === selectedStoreId
+  })
+
+  // 서버 응답은 날짜/시간순으로 정렬된 상태이며, normalizeVisitorHistory도 정렬합니다.
+  const latestStoreRecord = storeHistory.length
+    ? storeHistory[storeHistory.length - 1]
     : null
-  const validSensorLastSeen =
-    sensorLastSeenAt && !Number.isNaN(sensorLastSeenAt.getTime())
-      ? sensorLastSeenAt
-      : null
+
+  // 오늘의 출입 기록만 집계합니다. 날짜는 사용자의 현지 날짜를 따릅니다.
+  const todayHistory = storeHistory.filter((row) =>
+    row.date instanceof Date &&
+    !Number.isNaN(row.date.getTime()) &&
+    row.date.getFullYear() === currentTime.getFullYear() &&
+    row.date.getMonth() === currentTime.getMonth() &&
+    row.date.getDate() === currentTime.getDate()
+  )
+
+  // 기존 /api/people/hourly는 모든 매장이 합쳐진 값입니다.
+  // 그래서 오늘 선택 매장의 실제 증가분으로 시간대별 그래프를 계산합니다.
+  const hourlyBuckets = new Map()
+  todayHistory.forEach((row) => {
+    const hour = row.date.getHours()
+    const bucket = hourlyBuckets.get(hour) || { time: `${String(hour).padStart(2, '0')}:00`, count: 0 }
+    bucket.count += row.deltaIn
+    hourlyBuckets.set(hour, bucket)
+  })
+  const hourlyData = [...hourlyBuckets.entries()]
+    .sort(([a], [b]) => a - b)
+    .map(([, value]) => value)
+
+  // 출입 기록의 시각은 센서 heartbeat가 아니므로 전원/통신 상태로 단정하지 않습니다.
+  const validSensorLastSeen = latestStoreRecord?.date ?? null
   const sensorEventAgeMs = validSensorLastSeen
     ? currentTime.getTime() - validSensorLastSeen.getTime()
     : null
@@ -519,18 +438,19 @@ useEffect(() => {
       ? '조회 중'
       : visitorApiStatus === 'disconnected'
         ? '조회 실패'
-        : !validSensorLastSeen
-          ? '수신 기록 없음'
-          : hasRecentSensorEvent
-            ? '최근 출입 기록 있음'
-            : '최근 출입 기록 없음'
+        : !selectedStore
+          ? '매장 선택 필요'
+          : !validSensorLastSeen
+            ? '수신 기록 없음'
+            : hasRecentSensorEvent
+              ? '최근 출입 기록 있음'
+              : '최근 출입 기록 없음'
 
   const sensorLastSeenText = validSensorLastSeen
     ? validSensorLastSeen.toLocaleString('ko-KR')
     : '기록 없음'
 
-  const lastSensorEvent =
-    visitorApiData?.lastEvent || visitorApiData?.eventType || ''
+  const lastSensorEvent = latestStoreRecord?.eventType || ''
   const lastSensorEventText =
     lastSensorEvent === 'IN'
       ? '입장'
@@ -539,27 +459,6 @@ useEffect(() => {
         : lastSensorEvent && lastSensorEvent !== 'NONE'
           ? lastSensorEvent
           : '정보 없음'
-
-  /* 실제 FlowUp DB 데이터 */
-  const hourlyData = hourlyApiData
-  const parsedHistory = normalizeVisitorHistory(historyApiData)
-
-  // 오늘 날짜의 방문 기록만 집계합니다. API 연결이 끊기면 빈 배열이므로 0명으로 표시됩니다.
-  const nowForDateKey = new Date()
-  const todayDateKey = `${nowForDateKey.getFullYear()}-${String(nowForDateKey.getMonth() + 1).padStart(2, '0')}-${String(nowForDateKey.getDate()).padStart(2, '0')}`
-  const todayHistory = parsedHistory.filter((item) => {
-    if (!(item.date instanceof Date) || Number.isNaN(item.date.getTime())) {
-      return false
-    }
-
-    const itemDateKey = [
-      item.date.getFullYear(),
-      String(item.date.getMonth() + 1).padStart(2, '0'),
-      String(item.date.getDate()).padStart(2, '0')
-    ].join('-')
-
-    return itemDateKey === todayDateKey
-  })
 
   const calculatedBusyTime =
     hourlyData.length > 0
@@ -603,8 +502,8 @@ useEffect(() => {
         average: 0
       }
 
-  const totalInCount = parsedHistory.reduce((sum, item) => sum + item.deltaIn, 0)
-  const totalOutCount = parsedHistory.reduce((sum, item) => sum + item.deltaOut, 0)
+  const totalInCount = storeHistory.reduce((sum, item) => sum + item.deltaIn, 0)
+  const totalOutCount = storeHistory.reduce((sum, item) => sum + item.deltaOut, 0)
   const totalEventCount = totalInCount + totalOutCount
 
   const entryRatio = totalEventCount > 0
@@ -618,7 +517,7 @@ useEffect(() => {
   const weekdayNames = ['일', '월', '화', '수', '목', '금', '토']
   const dailyVisitorMap = new Map()
 
-  parsedHistory.forEach((item) => {
+  storeHistory.forEach((item) => {
     const dateKey = [
       item.date.getFullYear(),
       String(item.date.getMonth() + 1).padStart(2, '0'),
@@ -743,10 +642,10 @@ useEffect(() => {
         >
           <span className="flow-api-status-dot" />
           {visitorApiStatus === 'connected'
-            ? '방문자 API 연결됨 · 저장된 데이터 조회 가능'
+            ? '방문 기록 API 연결됨 · 선택 매장 데이터 조회 가능'
             : visitorApiStatus === 'connecting'
-              ? '센서 API 연결 중...'
-              : '신호 안 잡힘 · 센서/API 연결을 확인하세요. 화면은 계속 표시됩니다.'}
+              ? '방문 기록 API 연결 중...'
+              : '방문 기록 API 조회 실패 · 저장된 데이터를 확인할 수 없습니다.'}
         </div>
 
         {/* 현재 매장 */}
@@ -900,7 +799,7 @@ useEffect(() => {
         <p className="flow-dashboard-data-note">
           방문자 및 시간대별 통계는 센서 API 데이터를 기준으로 하며,
           요일별 통계는 FlowUp DB의 실제 방문 기록을 기준으로 계산합니다.
-          서울시 인구·혼잡도는 강남역 기준입니다.
+          방문자 수는 선택한 매장 기준이며, 서울시 인구·혼잡도는 강남역 기준입니다.
         </p>
 
         {/* 방문 현황 */}
@@ -924,15 +823,15 @@ useEffect(() => {
                 </span>
 
                 <strong>
-  {todayHistory.reduce((sum, item) => sum + item.deltaIn, 0)}명
+  {visitorApiStatus === 'connected' ? `${todayHistory.reduce((sum, item) => sum + item.deltaIn, 0)}명` : '—'}
 </strong>
 
                 <small>
-  입장 {todayHistory.reduce((sum, item) => sum + item.deltaIn, 0)}명
+  입장 {visitorApiStatus === 'connected' ? `${todayHistory.reduce((sum, item) => sum + item.deltaIn, 0)}명` : '—'}
   {' · '}
-  퇴장 {todayHistory.reduce((sum, item) => sum + item.deltaOut, 0)}명
+  퇴장 {visitorApiStatus === 'connected' ? `${todayHistory.reduce((sum, item) => sum + item.deltaOut, 0)}명` : '—'}
   {' · '}
-  현재 {visitorApiData?.peopleNow ?? 0}명
+  마지막 기록 {visitorApiStatus === 'connected' ? (latestStoreRecord ? `${latestStoreRecord.peopleNow}명` : '없음') : '—'}
 </small>
               </div>
 
@@ -942,7 +841,7 @@ useEffect(() => {
                 </span>
 
                 <span className="flow-dashboard-stat-label">
-                  현재 혼잡도
+                  주변 혼잡도 (강남역)
                 </span>
 
                 <strong className="flow-dashboard-accent">
@@ -1040,7 +939,7 @@ useEffect(() => {
                 </strong>
 
                 <small>
-                  평균 {busyTime.average}명
+                  입장 {busyTime.average}명
                 </small>
               </div>
 
@@ -1058,7 +957,7 @@ useEffect(() => {
                 </strong>
 
                 <small>
-                  평균 {quietTime.average}명
+                  입장 {quietTime.average}명
                 </small>
               </div>
             </div>
@@ -1296,7 +1195,7 @@ useEffect(() => {
                       ? '연결 중'
                       : '연결 실패'}
                 </strong>
-                <p>Supabase에 저장된 방문 기록을 조회하는 API 상태입니다.</p>
+                <p>선택 매장 방문 기록의 Supabase 조회 상태입니다.</p>
               </div>
             </div>
 
@@ -1313,7 +1212,7 @@ useEffect(() => {
                 </strong>
                 <p>
                   장치 ID: {visitorApiStatus === 'connected'
-                    ? visitorApiData?.deviceId || '정보 없음'
+                    ? latestStoreRecord?.deviceId || '정보 없음'
                     : '정보 없음'}
                 </p>
                 <p>출입 이벤트만으로 센서 전원·통신 상태를 확정할 수는 없습니다.</p>
