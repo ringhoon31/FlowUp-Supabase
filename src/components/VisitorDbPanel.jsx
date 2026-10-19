@@ -41,11 +41,13 @@ function VisitorDbPanel({ selectedStore }) {
         const rowStoreId = row.storeId ?? row.store_id
         const rowDeviceId = String(row.deviceId || '').trim()
 
-        // 장치 ID가 설정된 매장은 그 장치의 기록을 사용합니다.
-        // 매장 ID가 이전 DB 데이터와 달라도 같은 센서라면 조회할 수 있습니다.
-        if (selectedDeviceId) return rowDeviceId === selectedDeviceId
-        return rowStoreId !== null && rowStoreId !== undefined &&
-          String(rowStoreId) === selectedStoreId
+        // 매장 ID가 저장된 기록은 매장 ID가 최우선입니다.
+        // 같은 store_id라면 과거 장치 ID(store01)의 기록도 포함합니다.
+        if (rowStoreId !== null && rowStoreId !== undefined && String(rowStoreId) !== '') {
+          return selectedStoreId !== '' && String(rowStoreId) === selectedStoreId
+        }
+        // store_id가 없는 구형 데이터만 장치 ID로 보완합니다.
+        return selectedDeviceId !== '' && rowDeviceId === selectedDeviceId
       })
 
       if (sequence !== requestSequence.current) return
@@ -132,7 +134,7 @@ function VisitorDbPanel({ selectedStore }) {
         <div className="visitor-store-icon">🏪</div>
         <div>
           <h3>{selectedStore?.name || '선택된 매장 없음'}</h3>
-          <p>장치 ID: {selectedDeviceId || '설정되지 않음'}</p>
+          <p>매장 ID: {selectedStoreId || '설정되지 않음'} · 등록 장치 ID: {selectedDeviceId || '설정되지 않음'}</p>
         </div>
       </div>
 

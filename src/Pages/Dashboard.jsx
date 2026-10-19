@@ -383,16 +383,20 @@ function Dashboard({
     seoulRealtime?.congestionMessage ||
     '현재 혼잡도 정보를 확인할 수 없습니다.'
 
-  /* 매장별 통계: 하단 패널과 동일한 device_id 우선 규칙 */
+  /* 매장별 통계: store_id 우선, 매장 ID가 없는 과거 데이터만 device_id로 대조 */
   const parsedHistory = normalizeVisitorHistory(historyApiData)
   const selectedDeviceId = String(selectedStore?.deviceId || '').trim()
   const selectedStoreId = selectedStore?.id == null ? '' : String(selectedStore.id)
   const storeHistory = parsedHistory.filter((row) => {
     if (!selectedStoreId && !selectedDeviceId) return false
-    // 센서 ID가 지정된 매장은 그 센서에서 발생한 기록만 사용합니다.
-    if (selectedDeviceId) return String(row.deviceId || '').trim() === selectedDeviceId
     const rowStoreId = row.storeId ?? row.store_id
-    return rowStoreId != null && String(rowStoreId) === selectedStoreId
+    // store_id가 있는 기록은 반드시 매장 ID가 일치해야 합니다.
+    // 장치 이름이 store01 → ESP8266_01로 달라져도 동일 매장의 기록은 포함됩니다.
+    if (rowStoreId !== null && rowStoreId !== undefined && String(rowStoreId) !== '') {
+      return selectedStoreId !== '' && String(rowStoreId) === selectedStoreId
+    }
+    // store_id가 누락된 구형 기록에 한해서만 센서 ID로 판단합니다.
+    return selectedDeviceId !== '' && String(row.deviceId || '').trim() === selectedDeviceId
   })
 
   // 서버 응답은 날짜/시간순으로 정렬된 상태이며, normalizeVisitorHistory도 정렬합니다.
