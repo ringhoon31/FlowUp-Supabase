@@ -95,6 +95,8 @@ function StoreRegister({
     selectedStore?.deviceId || ''
   )
 
+  const [saving, setSaving] = useState(false)
+
   const startNewStore = () => {
     setEditingId('')
     setStoreName('')
@@ -102,14 +104,15 @@ function StoreRegister({
     setLatitude('')
     setLongitude('')
     setDeviceId('')
+    setSavedStore(null)
   }
 
   const editStore = (store) => {
     setEditingId(store.id)
     setStoreName(store.name)
     setAddress(store.address)
-    setLatitude(store.latitude)
-    setLongitude(store.longitude)
+    setLatitude(store.latitude ?? '')
+    setLongitude(store.longitude ?? '')
     setDeviceId(store.deviceId || '')
     setSavedStore(store)
   }
@@ -192,29 +195,45 @@ function StoreRegister({
       return
     }
 
+    // Store writes are protected by a separate server-side administrator password.
+    // Do not store this password in localStorage, VITE_ variables, or source code.
+    const adminPassword = window.prompt('매장 등록/수정 관리자 비밀번호를 입력해 주세요.')
+    if (adminPassword === null) return
+    if (!adminPassword.trim()) {
+      alert('관리자 비밀번호가 필요합니다.')
+      return
+    }
+
+    setSaving(true)
     try {
-      const userId = Number(localStorage.getItem('flowupUserId'))
+      const rawUserId = localStorage.getItem('flowupUserId')
+      const userId = rawUserId && /^\d+$/.test(rawUserId) ? Number(rawUserId) : null
       const body = {
         storeName: storeName.trim(),
         address: address.trim(),
         latitude: Number(latitude),
         longitude: Number(longitude),
         deviceId: deviceId.trim(),
-        userId: Number.isFinite(userId) ? userId : null
+        userId
       }
 
+      const apiBase = (import.meta.env.VITE_VISITOR_API_URL || '').replace(/\/$/, '')
       const url = editingId
-        ? `${(import.meta.env.VITE_VISITOR_API_URL || 'http://localhost:3001')}/api/stores/${editingId}`
-        : `${(import.meta.env.VITE_VISITOR_API_URL || 'http://localhost:3001')}/api/stores`
+        ? `${apiBase}/api/stores/${encodeURIComponent(editingId)}`
+        : `${apiBase}/api/stores`
 
       const response = await fetch(url, {
         method: editingId ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Flowup-Store-Admin-Password': adminPassword
+        },
         body: JSON.stringify(body)
       })
 
       if (!response.ok) {
-        throw new Error('매장 정보를 저장하지 못했습니다.')
+        const errorBody = await response.json().catch(() => ({}))
+        throw new Error(errorBody.message || `매장 저장 실패 (HTTP ${response.status})`)
       }
 
       const result = await response.json()
@@ -236,6 +255,8 @@ function StoreRegister({
     } catch (error) {
       console.error('매장 저장 실패:', error)
       alert(error.message || '매장 저장 중 오류가 발생했습니다.')
+    } finally {
+      setSaving(false)
     }
   }
 
@@ -403,10 +424,11 @@ function StoreRegister({
               <button
                 type="submit"
                 className="flow-store-save-button"
+                disabled={saving}
               >
                 <StoreIcon name="save" />
 
-                {editingId
+                {saving ? '저장 중...' : editingId
                   ? '매장 정보 수정'
                   : '매장 정보 저장'}
               </button>

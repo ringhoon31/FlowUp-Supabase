@@ -8,9 +8,6 @@ import { normalizeVisitorHistory } from '../visitorData'
 import '../styles/visitorDb.css'
 
 
-// 현재 Login.jsx에서 사용하는 임시 관리자 비밀번호
-const TEST_ADMIN_PASSWORD = 'flowup1234'
-
 const iconPaths = {
   visits: (
     <>
@@ -242,33 +239,20 @@ function Dashboard({
     setDeleteError('')
   }
 
-  const handleDeleteStore = (event) => {
+  const handleDeleteStore = async (event) => {
     event.preventDefault()
-
-    if (!storeToDelete) {
+    if (!storeToDelete) return
+    if (!deletePassword.trim()) {
+      setDeleteError('관리자 비밀번호를 입력해 주세요.')
       return
     }
-
-    if (
-      deletePassword !==
-      TEST_ADMIN_PASSWORD
-    ) {
-      setDeleteError(
-        '관리자 비밀번호가 올바르지 않습니다.'
-      )
-
-      return
+    try {
+      await onDeleteStore(storeToDelete.id, deletePassword)
+      if (stores.length <= 1) setStorePickerOpen(false)
+      closeDeleteDialog()
+    } catch (error) {
+      setDeleteError(error.message || '매장을 삭제하지 못했습니다.')
     }
-
-    onDeleteStore(
-      storeToDelete.id
-    )
-
-    if (stores.length <= 1) {
-      setStorePickerOpen(false)
-    }
-
-    closeDeleteDialog()
   }
 
   const fetchCityData = async () => {

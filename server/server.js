@@ -1,4 +1,5 @@
 import express from 'express'
+import { timingSafeEqual } from 'node:crypto'
 import cors from 'cors'
 import dotenv from 'dotenv'
 
@@ -226,11 +227,27 @@ const asStore = (r) => ({ id: String(r.store_id), name: r.store_name, address: r
 const storePayload = (r) => ({ store_name: String(r.storeName || '').trim(), address: String(r.address || '').trim(),
   latitude: r.latitude, longitude: r.longitude, device_id: r.deviceId || null, user_id: r.userId || null })
 
+// Only administrators knowing the server-side secret may mutate stores.
+// Never expose this secret through a VITE_ variable or client source code.
+function requireStoreAdmin(req, res, next) {
+  const expected = process.env.FLOWUP_STORE_ADMIN_PASSWORD || ''
+  if (!expected) return res.status(503).json({ message: '서버에 매장 관리자 비밀번호가 설정되지 않았습니다.' })
+
+  const supplied = req.get('X-Flowup-Store-Admin-Password') || ''
+  const suppliedBytes = Buffer.from(supplied, 'utf8')
+  const expectedBytes = Buffer.from(expected, 'utf8')
+  if (suppliedBytes.length !== expectedBytes.length ||
+      !timingSafeEqual(suppliedBytes, expectedBytes)) {
+    return res.status(403).json({ message: '매장 관리자 비밀번호가 올바르지 않습니다.' })
+  }
+  next()
+}
+
 app.get('/api/stores', async (req, res) => {
   try { res.json((await supabase('flowup_stores', `?select=${storeFields}&order=store_id.asc`)).map(asStore)) }
   catch (e) { reportError(res, e) }
 })
-app.post('/api/stores', async (req, res) => {
+app.post('/api/stores', requireStoreAdmin, async (req, res) => {
   try {
     const payload = storePayload(req.body)
     if (!payload.store_name || !payload.address) return res.status(400).json({ message: '매장명과 주소가 필요합니다.' })
@@ -238,7 +255,7 @@ app.post('/api/stores', async (req, res) => {
     res.json({ store: asStore(rows[0]) })
   } catch (e) { reportError(res, e) }
 })
-app.put('/api/stores/:id', async (req, res) => {
+app.put('/api/stores/:id', requireStoreAdmin, async (req, res) => {
   try {
     const rows = await supabase('flowup_stores', `?store_id=eq.${encodeURIComponent(req.params.id)}&select=${storeFields}`, {
       method: 'PATCH', body: JSON.stringify(storePayload(req.body))
@@ -247,7 +264,7 @@ app.put('/api/stores/:id', async (req, res) => {
     res.json({ store: asStore(rows[0]) })
   } catch (e) { reportError(res, e) }
 })
-app.delete('/api/stores/:id', async (req, res) => {
+app.delete('/api/stores/:id', requireStoreAdmin, async (req, res) => {
   try {
     // Never silently delete visitor history. Supabase FK policy decides if deletion is allowed.
     await supabase('flowup_stores', `?store_id=eq.${encodeURIComponent(req.params.id)}`, { method: 'DELETE' })

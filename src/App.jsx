@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 
 import Home from './Pages/Home'
@@ -15,8 +15,7 @@ import { dashboardData } from './mockData'
 import {
   loadStores,
   loadSelectedStoreId,
-  saveSelectedStore,
-  removeStore
+  saveSelectedStore
 } from './storeStorage'
 
 function App() {
@@ -57,6 +56,41 @@ const changeTheme = (nextTheme) => {
       (store) =>
         store.id === selectedStoreId
     ) ?? null
+
+  const apiBase = (import.meta.env.VITE_VISITOR_API_URL || '').replace(/\/$/, '')
+
+  // Supabase is the source of truth. Keep a local copy only for legacy map markers.
+  const refreshStores = async (preferredId = '') => {
+    const response = await fetch(`${apiBase}/api/stores`, { cache: 'no-store' })
+    if (!response.ok) {
+      throw new Error(`매장 목록 조회 실패 (HTTP ${response.status})`)
+    }
+    const result = await response.json()
+    if (!Array.isArray(result)) {
+      throw new Error('매장 목록 응답 형식이 올바르지 않습니다.')
+    }
+    const remoteStores = result.map((store) => ({
+      ...store,
+      id: String(store.id)
+    }))
+    localStorage.setItem('flowupStores', JSON.stringify(remoteStores))
+    setStores(remoteStores)
+
+    const chosen = preferredId && remoteStores.some((store) => store.id === String(preferredId))
+      ? String(preferredId)
+      : loadSelectedStoreId(remoteStores)
+    setSelectedStoreId(saveSelectedStore(chosen, remoteStores))
+    return remoteStores
+  }
+
+  // Read stores from DB once an administrator opens the web app.
+  useEffect(() => {
+    if (!isLoggedIn) return
+    refreshStores().catch((error) => {
+      console.error('Supabase 매장 목록 불러오기 실패:', error)
+      alert('매장 목록을 불러오지 못했습니다. 잠시 후 새로고침해 주세요.')
+    })
+  }, [isLoggedIn])
 
   const goToPage = (page) => {
     const adminPages = [
@@ -121,7 +155,7 @@ const changeTheme = (nextTheme) => {
       loginUser.userName
     )
 
-    // 기존 localStorage 매장은 유지하며 Supabase 매장 API는 별도로 제공합니다.
+    // 화면은 캐시에서 즉시 복원하고, 로그인 직후 Supabase 목록으로 갱신합니다.
     const localStores = loadStores()
 
     setStores(localStores)
@@ -164,30 +198,43 @@ const changeTheme = (nextTheme) => {
     setSelectedStoreId(savedId)
   }
 
-  const handleDeleteStore = (storeId) => {
-    const result = removeStore(storeId)
-
-    setStores(result.stores)
-    setSelectedStoreId(result.selectedStoreId)
-
-    if (result.stores.length === 0) {
-      localStorage.removeItem('flowupStore')
-      localStorage.removeItem('flowupSelectedStoreId')
+  const handleDeleteStore = async (storeId, adminPassword) => {
+    const response = await fetch(`${apiBase}/api/stores/${encodeURIComponent(storeId)}`, {
+      method: 'DELETE',
+      headers: { 'X-Flowup-Store-Admin-Password': adminPassword || '' }
+    })
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}))
+      throw new Error(error.message || `매장 삭제 실패 (HTTP ${response.status})`)
+    }
+    // The DB deleted the row. Reload rather than mutating localStorage only.
+    try {
+      await refreshStores(selectedStoreId === String(storeId) ? '' : selectedStoreId)
+    } catch (error) {
+      // Keep UI in sync even when the secondary GET fails.
+      const nextStores = stores.filter((store) => store.id !== String(storeId))
+      localStorage.setItem('flowupStores', JSON.stringify(nextStores))
+      setStores(nextStores)
+      setSelectedStoreId(saveSelectedStore(loadSelectedStoreId(nextStores), nextStores))
+      console.warn('삭제 후 매장 목록 재조회 실패:', error)
     }
   }
 
-  const handleStoreSaved = (savedStore) => {
-    const nextStores = loadStores()
-
-    setStores(nextStores)
-
-    const savedId = saveSelectedStore(
-      savedStore.id,
-      nextStores
-    )
-
-    setSelectedStoreId(savedId)
-    goToPage('dashboard')
+  const handleStoreSaved = async (savedStore) => {
+    try {
+      await refreshStores(savedStore.id)
+      goToPage('dashboard')
+    } catch (error) {
+      console.warn('매장 저장 후 목록 재조회 실패:', error)
+      alert('매장 저장은 성공했지만 목록 조회가 실패했습니다. 새로고침해 주세요.')
+      // DB write succeeded, still update local view immediately.
+      const store = { ...savedStore, id: String(savedStore.id) }
+      const nextStores = [...stores.filter((item) => item.id !== store.id), store]
+      localStorage.setItem('flowupStores', JSON.stringify(nextStores))
+      setStores(nextStores)
+      setSelectedStoreId(saveSelectedStore(store.id, nextStores))
+      goToPage('dashboard')
+    }
   }
 
 return (
