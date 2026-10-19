@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 
 import VisitorDbPanel from '../components/VisitorDbPanel'
 
-import { dashboardData } from '../mockData'
 
 import '../styles/dashboard.css'
 import { normalizeVisitorHistory } from '../visitorData'
@@ -513,70 +512,49 @@ useEffect(() => {
     cityData?.AREA_CONGEST_MSG ||
     '현재 혼잡도 정보를 확인할 수 없습니다.'
 
-  /* 날씨 */
-  let weatherData = cityData?.WEATHER_STTS
+  // API 조회 여부와 실제 센서 이벤트 기록을 구분합니다.
+  // /api/people은 DB의 마지막 출입 이벤트이며, 센서 연결 신호(heartbeat)가 아닙니다.
+  const sensorLastSeenAt = visitorApiData?.createdAt
+    ? new Date(visitorApiData.createdAt)
+    : null
+  const validSensorLastSeen =
+    sensorLastSeenAt && !Number.isNaN(sensorLastSeenAt.getTime())
+      ? sensorLastSeenAt
+      : null
+  const sensorEventAgeMs = validSensorLastSeen
+    ? currentTime.getTime() - validSensorLastSeen.getTime()
+    : null
+  const hasRecentSensorEvent =
+    visitorApiStatus === 'connected' &&
+    sensorEventAgeMs !== null &&
+    sensorEventAgeMs >= -60 * 1000 &&
+    sensorEventAgeMs <= 10 * 60 * 1000
 
-  if (Array.isArray(weatherData)) {
-    weatherData = weatherData[0]
-  }
+  const sensorStatusText =
+    visitorApiStatus === 'connecting'
+      ? '조회 중'
+      : visitorApiStatus === 'disconnected'
+        ? '조회 실패'
+        : !validSensorLastSeen
+          ? '수신 기록 없음'
+          : hasRecentSensorEvent
+            ? '최근 출입 기록 있음'
+            : '최근 출입 기록 없음'
 
-  const weatherStatus =
-    weatherData?.SKY_STTS ||
-    weatherData?.skyStts ||
-    '정보 없음'
+  const sensorLastSeenText = validSensorLastSeen
+    ? validSensorLastSeen.toLocaleString('ko-KR')
+    : '기록 없음'
 
-  const weatherTemperature =
-    weatherData?.TEMP ??
-    weatherData?.temp ??
-    '-'
-
-  const weatherMaxTemperature =
-    weatherData?.MAX_TEMP ??
-    weatherData?.maxTemp ??
-    '-'
-
-  const weatherMinTemperature =
-    weatherData?.MIN_TEMP ??
-    weatherData?.minTemp ??
-    '-'
-
-  const precipitation =
-    weatherData?.PRECIPITATION ||
-    weatherData?.precipitation ||
-    '없음'
-
-  const precipitationType =
-    weatherData?.PRECPT_TYPE ||
-    weatherData?.precptType ||
-    '없음'
-
-  const rainChance =
-    weatherData?.RAIN_CHANCE ??
-    weatherData?.rainChance ??
-    '-'
-
-  let weatherIcon = '☀️'
-
-  if (
-    weatherStatus.includes('비') ||
-    precipitationType.includes('비')
-  ) {
-    weatherIcon = '🌧️'
-  } else if (
-    weatherStatus.includes('눈') ||
-    precipitationType.includes('눈')
-  ) {
-    weatherIcon = '❄️'
-  } else if (
-    weatherStatus.includes('흐림') ||
-    weatherStatus.includes('흐린')
-  ) {
-    weatherIcon = '☁️'
-  } else if (
-    weatherStatus.includes('구름')
-  ) {
-    weatherIcon = '⛅'
-  }
+  const lastSensorEvent =
+    visitorApiData?.lastEvent || visitorApiData?.eventType || ''
+  const lastSensorEventText =
+    lastSensorEvent === 'IN'
+      ? '입장'
+      : lastSensorEvent === 'OUT'
+        ? '퇴장'
+        : lastSensorEvent && lastSensorEvent !== 'NONE'
+          ? lastSensorEvent
+          : '정보 없음'
 
   /* 실제 FlowUp DB 데이터 */
   const hourlyData = hourlyApiData
@@ -781,7 +759,7 @@ useEffect(() => {
         >
           <span className="flow-api-status-dot" />
           {visitorApiStatus === 'connected'
-            ? '센서 API 연결됨 · 실시간 데이터 수신 중'
+            ? '방문자 API 연결됨 · 저장된 데이터 조회 가능'
             : visitorApiStatus === 'connecting'
               ? '센서 API 연결 중...'
               : '신호 안 잡힘 · 센서/API 연결을 확인하세요. 화면은 계속 표시됩니다.'}
@@ -938,7 +916,7 @@ useEffect(() => {
         <p className="flow-dashboard-data-note">
           방문자 및 시간대별 통계는 센서 API 데이터를 기준으로 하며,
           요일별 통계는 FlowUp DB의 실제 방문 기록을 기준으로 계산합니다.
-          서울시 인구·혼잡도·날씨는 강남역 기준입니다.
+          서울시 인구·혼잡도는 강남역 기준입니다.
         </p>
 
         {/* 방문 현황 */}
@@ -1299,7 +1277,7 @@ useEffect(() => {
           </details>
         </div>
 
-        {/* 센서 상태 / 오늘의 날씨 / 추가 정보 */}
+        {/* 실제 방문자 API 및 DB 기록을 기준으로 한 운영 정보 */}
         <details
           className="flow-dashboard-card flow-dashboard-operation"
           open
@@ -1313,76 +1291,48 @@ useEffect(() => {
               <span className="flow-dashboard-operation-icon">
                 <Icon name="sensor" />
               </span>
-
               <div>
-                <small>
-                  센서 상태
-                </small>
-
-                <strong>
-                  {dashboardData.sensor.status}
-                </strong>
-
-                <p>
-                  {dashboardData.sensor.description}
-                </p>
+                <small>센서 기록 상태</small>
+                <strong>{sensorStatusText}</strong>
+                <p>마지막 출입 기록: {sensorLastSeenText}</p>
+                <p>최근 10분간 출입 기록 여부를 기준으로 표시합니다.</p>
               </div>
             </div>
 
             <div className="flow-dashboard-operation-item">
               <span className="flow-dashboard-operation-icon">
-                {weatherIcon}
+                <Icon name="check" />
               </span>
-
               <div>
-                <small>
-                  오늘의 날씨
-                </small>
-
+                <small>방문자 API 상태</small>
                 <strong>
-                  {cityDataStatus === 'loading'
-                    ? '불러오는 중'
-                    : `${weatherTemperature}°C`}
+                  {visitorApiStatus === 'connected'
+                    ? '연결됨'
+                    : visitorApiStatus === 'connecting'
+                      ? '연결 중'
+                      : '연결 실패'}
                 </strong>
-
-                <p>
-                  {cityDataStatus === 'error'
-                    ? '날씨 정보를 불러오지 못했습니다.'
-                    : `${weatherStatus} · 최고 ${weatherMaxTemperature}°C / 최저 ${weatherMinTemperature}°C`}
-                </p>
+                <p>Supabase에 저장된 방문 기록을 조회하는 API 상태입니다.</p>
               </div>
             </div>
 
-            <div className="flow-dashboard-operation-item flow-dashboard-extra">
+            <div className="flow-dashboard-operation-item">
               <span className="flow-dashboard-operation-icon">
                 <Icon name="document" />
               </span>
-
               <div>
-                <small>
-                  추가 정보
-                </small>
-
+                <small>마지막 기록 정보</small>
                 <strong>
-                  {weatherStatus}
+                  {visitorApiStatus === 'connected'
+                    ? lastSensorEventText
+                    : '정보 없음'}
                 </strong>
-
                 <p>
-                  현재 {weatherTemperature}°C
-                  {' · '}
-                  강수확률 {rainChance}%
+                  장치 ID: {visitorApiStatus === 'connected'
+                    ? visitorApiData?.deviceId || '정보 없음'
+                    : '정보 없음'}
                 </p>
-
-                <p>
-                  강수량 {precipitation}
-                  {' · '}
-                  강수 형태 {precipitationType}
-                </p>
-
-                <p>
-                  알림:{' '}
-                  {dashboardData.extraInfo.notification}
-                </p>
+                <p>출입 이벤트만으로 센서 전원·통신 상태를 확정할 수는 없습니다.</p>
               </div>
             </div>
           </div>
